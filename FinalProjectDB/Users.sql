@@ -1,9 +1,0 @@
-﻿CREATE TABLE [dbo].[Users]
-(
-	UserId INT NOT NULL PRIMARY KEY,
-    FirstName NVARCHAR(50) NOT NULL,
-    LastName NVARCHAR(50) NOT NULL,
-    RoleId INT NOT NULL FOREIGN KEY REFERENCES Roles(RoleId),
-    Phone NVARCHAR(20),
-    AddressId INT FOREIGN KEY REFERENCES Addresses(AddressId)
-)
