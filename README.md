@@ -16,14 +16,15 @@
 - Enter the project name **PropertyRental** and chose the **Repo** location of the project 
 - Connect the Application to the Database
 - Install the required NuGet Packages
-   - Microsoft.EntityFrameworkCore.Sqlite Version : 6.0.0 latest
-   - Microsoft.VisualStudio.Web.CodeGeneration.Design Version : 6.0.0 latest
-   - Microsoft.EntityFrameworkCore.SqlServer Version : 6.0.0 latest
+   - Microsoft.EntityFrameworkCore.Sqlite Version : 6.0.23
+   - Microsoft.VisualStudio.Web.CodeGeneration.Design Version : 6.0.16
+   - Microsoft.EntityFrameworkCore.SqlServer Version : 6.0.23
+   - Microsoft.EntityFrameworkCore.Tools Version : 6.0.23
 - Create a Model from the Database
    - enter the Scaffold-DbContext command in the Package Manager Console:
    insert command format
    ```
-   Scaffold-DbContext "Data Source=WINDOWS11JM\SQLEXPRESS;Initial Catalog=PropertyRentalDB;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+   Scaffold-DbContext "Data Source=WINDOWS11JM\SQLEXPRESS;Initial Catalog=PropertyRentalDB;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Roles,Addresses,MessagesStatus,Status,EventTypes,Users,Login,Apartments,ApartmentImages, Buildings,Appointments,Messages,Events
    ```
    - **replace the Data Source and with your own SQL Server name** (in my case, it is WINDOWS11JM\SQLEXPRESS)
    - Modify the Generate Code in PropertyRentalDBContext.cs
