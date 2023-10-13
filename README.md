@@ -24,7 +24,7 @@
    - enter the Scaffold-DbContext command in the Package Manager Console:
    insert command format
    ```
-   Scaffold-DbContext "Data Source=WINDOWS11JM\SQLEXPRESS;Initial Catalog=PropertyRentalDB;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Roles,Addresses,MessagesStatus,Status,EventTypes,Users,Login,Apartments,ApartmentImages, Buildings,Appointments,Messages,Events
+   Scaffold-DbContext "Data Source=WINDOWS11JM\SQLEXPRESS;Initial Catalog=PropertyRentalDB;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Roles,Addresses,MessageStatus,Statuses,EventTypes,Users,Login,Apartments,ApartmentImages,Buildings,Appointments,Messages,Events
    ```
    - **replace the Data Source and with your own SQL Server name** (in my case, it is WINDOWS11JM\SQLEXPRESS)
    - Modify the Generate Code in PropertyRentalDBContext.cs
@@ -69,7 +69,7 @@
    - modify the Program.cs
    ```
    var connection = builder.Configuration.GetConnectionString("PropertyRentalDBContextConnection");
-   builder.Services.AddDbContext<Models.PropertyRentalDBContext>(options => options.UseSqlServer(connection));
+   builder.Services.AddDbContext<PropertyRental.Models.PropertyRentalDBContext>(options => options.UseSqlServer(connection));
    ```
 
 - Create a Controller
@@ -79,7 +79,7 @@
    - Select MVC Controller with views, using Entity Framework
    - Select the Model Class
    - Select the Data Context Class
-   - Select the Views Layout
+   - Select the Views Layout (Views/Shared/_Layout.cshtml)
    - Select the Views Folder
    - Select the Reference Script Libraries
    - Click Add
