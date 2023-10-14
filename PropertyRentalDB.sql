@@ -1,22 +1,18 @@
 -- Check if the database exists, and if so, drop it
-IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'PropertyRentalDB')
-    BEGIN
-        ALTER DATABASE PropertyRentalDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-        DROP DATABASE PropertyRentalDB;
-    END
-
--- Create a new database
-CREATE DATABASE PropertyRentalDB;
-
--- Use the newly created database
-USE PropertyRentalDB;
+IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'PropertyRentalDB')
+	BEGIN
+    	CREATE DATABASE [PropertyRentalDB]
+	END
+	GO
+		USE [PropertyRentalDB]
+	GO
 
 -- Create the Roles Table
 CREATE TABLE Roles (
     RoleID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     RoleName NVARCHAR(50)
 );
-
+GO
 -- Create the Addresses Table
 CREATE TABLE Addresses (
     AddressID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -27,25 +23,25 @@ CREATE TABLE Addresses (
     Country NVARCHAR(50),
     Province NVARCHAR(50)
 );
-
+GO
 -- Create the MessageStatus Table
 CREATE TABLE MessageStatus (
     MessageStatusID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     Status NVARCHAR(50)
 );
-
+GO
 -- Create the Statuses Table
 CREATE TABLE Statuses (
     StatusID INT NOT NULL PRIMARY KEY,
     StatusName NVARCHAR(50)
 );
-
+GO
 -- Create the EventTypes Table
 CREATE TABLE EventTypes (
     EventTypeID INT PRIMARY KEY IDENTITY(1,1),
     EventTypeName NVARCHAR(50)
 );
-
+GO
 -- Create the Users Table
 CREATE TABLE Users (
     UserID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -57,7 +53,7 @@ CREATE TABLE Users (
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID),
     FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
 );
-
+GO
 -- Create the Login Table
 CREATE TABLE Login (
     LoginID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -66,7 +62,7 @@ CREATE TABLE Login (
     Password NVARCHAR(100),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
-
+GO
 -- Create the Apartments Table
 CREATE TABLE Apartments (
     ApartmentID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -81,7 +77,7 @@ CREATE TABLE Apartments (
     ConstructionYear INT,
     Area FLOAT
 );
-
+GO
 -- Create the ApartmentImages Table
 CREATE TABLE ApartmentImages (
     ImageID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -89,7 +85,7 @@ CREATE TABLE ApartmentImages (
     ImageURL NVARCHAR(MAX),
     FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID)
 );
-
+GO
 -- Create the Buildings Table
 CREATE TABLE Buildings (
     BuildingID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -98,7 +94,7 @@ CREATE TABLE Buildings (
     ConstructionYear INT,
     Amenities NVARCHAR(MAX)
 );
-
+GO
 -- Create the Appointments Table
 CREATE TABLE Appointments (
     AppointmentID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -110,7 +106,7 @@ CREATE TABLE Appointments (
     FOREIGN KEY (TenantID) REFERENCES Users(UserID),
     FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
 );
-
+GO
 -- Create the Messages Table
 CREATE TABLE Messages (
     MessageID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -124,7 +120,7 @@ CREATE TABLE Messages (
     FOREIGN KEY (ReceiverID) REFERENCES Users(UserID),
     FOREIGN KEY (MessageStatusID) REFERENCES MessageStatus(MessageStatusID)
 );
-
+GO
 -- Create the Events Table
 CREATE TABLE Events (
     EventID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -139,7 +135,7 @@ CREATE TABLE Events (
     FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID),
     FOREIGN KEY (EventTypeID) REFERENCES EventTypes(EventTypeID)
 );
-
+GO
 -- Seed the Roles Table
 INSERT INTO Roles (RoleName)
 VALUES
