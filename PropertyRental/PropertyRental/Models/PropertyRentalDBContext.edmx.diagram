@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4f3b7c4254a948c2837211fa9d7452e8" Name="Diagram1">
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Address" Width="1.5" PointX="0.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.ApartmentImage" Width="1.5" PointX="7.5" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Apartment" Width="1.5" PointX="5.25" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Appointment" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Building" Width="1.5" PointX="3" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Event" Width="1.5" PointX="10.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.EventType" Width="1.5" PointX="8" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Login" Width="1.5" PointX="8.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Message" Width="1.5" PointX="11.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.MessageStatus" Width="1.5" PointX="9" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Role" Width="1.5" PointX="3.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.Status" Width="1.5" PointX="3" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PropertyRentalDBModel.User" Width="1.5" PointX="6" PointY="8" IsExpanded="true" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Apartment__Addre__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Appointme__Addre__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Buildings__Addre__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Users__AddressID__2F10007B" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Apartment__Apart__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Apartment__Build__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Apartment__Prope__4222D4EF" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Apartment__Statu__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Events__Apartmen__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Appointme__Prope__37A5467C" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Appointme__Tenan__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Events__EventTyp__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Events__Property__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Events__Property__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Logins__UserID__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Messages__Messag__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Messages__Receiv__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Messages__Sender__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="PropertyRentalDBModel.FK__Users__RoleID__2E1BDC42" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
