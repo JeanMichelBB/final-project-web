@@ -20,35 +20,98 @@ namespace PropertyRental.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Login(UserModel model)
+        public ActionResult Login(LoginModel model)
         {
             using (PropertyRentalDBEntities context = new PropertyRentalDBEntities())
             {
-                bool isValidUser = context.Logins.Any(login => login.Email.ToLower() ==
-                model.Email.ToLower() && login.Password == model.Password); if (isValidUser)
+                var user = context.Logins.FirstOrDefault(login =>
+                    login.Email.ToLower() == model.Email.ToLower() &&
+                    login.Password == model.Password);
+
+                if (user != null)
                 {
-                    FormsAuthentication.SetAuthCookie(model.Email, false); return RedirectToAction("Index", "Employees");
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
+
+                    // Retrieve the user's RoleID from the Users table
+                    var userRole = context.Users.FirstOrDefault(u => u.UserID == user.UserID);
+
+                    if (userRole != null)
+                    {
+                        // Redirect based on the user's RoleID
+                        switch (userRole.RoleID)
+                        {
+                            case 1: // Admin
+                                return RedirectToAction("dashboard", "Admin" , new { id = user.UserID });
+                            case 2: // Property Owner
+                                return RedirectToAction("dashboard", "PropertyOwner" , new { id = user.UserID });
+                            case 3: // Property Manager
+                                return RedirectToAction("dashboard", "PropertyManager" , new { id = user.UserID });
+                            case 4: // Tenant
+                                return RedirectToAction("index", "Tenant", new { id = user.UserID });
+                            default:
+                                return RedirectToAction("login");
+                        }
+                    }
                 }
-                ModelState.AddModelError("", "Invalid username or password !"); return View();
+                ModelState.AddModelError("", "Invalid username or password!");
+                return View();
             }
         }
+
+
         public ActionResult Signup()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult Signup(User user,Login login,Address address)
+        public ActionResult Signup(LoginModel signup)
         {
-            using (PropertyRentalDBEntities context = new
-            PropertyRentalDBEntities())
+            if (ModelState.IsValid)
             {
-                context.Logins.Add(login);
-                context.Users.Add(user);
-                context.Addresses.Add(address);
-                context.SaveChanges();
+                using (PropertyRentalDBEntities context = new PropertyRentalDBEntities())
+                {
+                    // Create instences for login
+                    var login = new Login
+                    {
+                        Email = signup.Email,
+                        Password = signup.Password
+                    };
+                    // Create instances for User
+                    var user = new User
+                    {
+                        FirstName = signup.FirstName,
+                        LastName = signup.LastName,
+                        Phone = signup.Phone,
+                        RoleID = signup.RoleID
+                    };
+                    // Create instances for Address
+                    var address = new Address
+                    {
+                        StreetName = signup.StreetName,
+                        StreetNumber = signup.StreetNumber,
+                        City = signup.City,
+                        PostalCode = signup.PostalCode,
+                        Country = signup.Country,
+                        Province = signup.Province,
+                    };
+
+                    // Add User and Address to the context
+                    context.Logins.Add(login);
+                    context.Users.Add(user);
+                    context.Addresses.Add(address);
+
+                    // Save changes to the database
+                    context.SaveChanges();
+
+                    return RedirectToAction("Login");
+                }
             }
-            return RedirectToAction("Login");
+
+            // If ModelState is not valid, return to the signup view with validation errors.
+            return View(signup);
         }
+
+
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut(); 

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PropertyRental.Models.Message>
+
+@{
+    ViewBag.Title = "MessageIndex";
+}
+<ul>
+    <li>@Html.ActionLink("Home", "Index", "Tenant")</li>
+    <li>@Html.ActionLink("MessageBox", "MessageIndex")</li>
+</ul>
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateMessage")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MessageBody)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MessageStatus.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User1.FirstName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Subject)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MessageBody)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Timestamp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MessageStatus.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User1.FirstName)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "DetailsMessage", new { id=item.MessageID }) |
+            @Html.ActionLink("Delete", "DeleteMessage", new { id=item.MessageID })
+        </td>
+    </tr>
+}
+
+</table>
