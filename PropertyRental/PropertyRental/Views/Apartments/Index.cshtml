@@ -5,10 +5,12 @@
 }
 
 <h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -76,12 +78,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.Status.StatusName)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ApartmentID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ApartmentID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ApartmentID })
-        </td>
+        @if (User.IsInRole("Admin"))
+        {
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ApartmentID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ApartmentID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ApartmentID })
+            </td>
+        }
     </tr>
-}
+    }
 
 </table>

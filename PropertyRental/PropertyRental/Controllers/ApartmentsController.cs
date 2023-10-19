@@ -15,6 +15,7 @@ namespace PropertyRental.Controllers
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Apartments
+        [Authorize]
         public ActionResult Index()
         {
             var apartments = db.Apartments.Include(a => a.Address).Include(a => a.Building).Include(a => a.User).Include(a => a.Status);
@@ -37,6 +38,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Create
+        [Authorize(Roles = "PropertyManager,Admin")]
         public ActionResult Create()
         {
             ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
@@ -51,6 +53,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="PropertyManager,Admin")]
         public ActionResult Create([Bind(Include = "ApartmentID,PropertyManagerID,AddressID,StatusID,BuildingID,NumberOfRooms,Amenities,Price,Floor,ConstructionYear,Area")] Apartment apartment)
         {
             if (ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Edit/5
+        [Authorize(Roles = "PropertyManager,Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -91,6 +95,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="PropertyManager,Admin")]
         public ActionResult Edit([Bind(Include = "ApartmentID,PropertyManagerID,AddressID,StatusID,BuildingID,NumberOfRooms,Amenities,Price,Floor,ConstructionYear,Area")] Apartment apartment)
         {
             if (ModelState.IsValid)
@@ -107,6 +112,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Delete/5
+        [Authorize(Roles = "PropertyManager,Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -124,6 +130,7 @@ namespace PropertyRental.Controllers
         // POST: Apartments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="PropertyManager,Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Apartment apartment = db.Apartments.Find(id);

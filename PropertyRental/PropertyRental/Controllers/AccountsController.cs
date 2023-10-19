@@ -24,6 +24,7 @@ namespace PropertyRental.Controllers
         {
             using (PropertyRentalDBEntities context = new PropertyRentalDBEntities())
             {
+                // TODO: Input validation
                 var user = context.Logins.FirstOrDefault(login =>
                     login.Email.ToLower() == model.Email.ToLower() &&
                     login.Password == model.Password);
@@ -41,13 +42,13 @@ namespace PropertyRental.Controllers
                         switch (userRole.RoleID)
                         {
                             case 1: // Admin
-                                return RedirectToAction("dashboard", "Admin" , new { id = user.UserID });
+                                return RedirectToAction("Index", "Apartments");
                             case 2: // Property Owner
-                                return RedirectToAction("dashboard", "PropertyOwner" , new { id = user.UserID });
+                                return RedirectToAction("dashboard", "PropertyOwner");
                             case 3: // Property Manager
-                                return RedirectToAction("dashboard", "PropertyManager" , new { id = user.UserID });
+                                return RedirectToAction("dashboard", "PropertyManager");
                             case 4: // Tenant
-                                return RedirectToAction("index", "Tenant", new { id = user.UserID });
+                                return RedirectToAction("Index", "Apartments");
                             default:
                                 return RedirectToAction("login");
                         }
