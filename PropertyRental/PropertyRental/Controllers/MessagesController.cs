@@ -17,8 +17,16 @@ namespace PropertyRental.Controllers
         // GET: Messages
         public ActionResult Index()
         {
-            var messages = db.Messages.Include(m => m.MessageStatus).Include(m => m.User).Include(m => m.User1);
+            User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+
+            var messages = db.Messages
+                .Include(m => m.MessageStatus)
+                .Include(m => m.User)
+                .Include(m => m.User1)
+                .Where(m => m.SenderID == user.UserID || m.ReceiverID == user.UserID);
+
             return View(messages.ToList());
+
         }
 
         // GET: Messages/Details/5
@@ -37,12 +45,33 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Messages/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
-            ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
-            ViewBag.SenderID = new SelectList(db.Users, "UserID", "FirstName");
-            return View();
+            User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+            if (User.IsInRole("Potential Tenant"))
+            {
+                ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
+                
+                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == user.UserID), "UserID", "FirstName");
+                // reviver id is null
+                if (id != null)
+                {
+                    var model = db.Apartments.Find(id);
+
+                    ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID == model.PropertyManagerID), "UserID", "FirstName");
+                }
+                else
+                {
+                    ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
+                }
+            }
+            else
+            {
+                ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
+                ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == user.UserID), "UserID", "FirstName");
+            }
+                return View();
         }
 
         // POST: Messages/Create

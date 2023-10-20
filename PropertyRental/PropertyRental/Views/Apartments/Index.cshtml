@@ -89,12 +89,12 @@
         }
         else
         {
-            <td>
-                @*TODO: the last argument is the information i want to send to the pages *@
-                @Html.ActionLink("Appointment", "Create", "Appointments") |
-                @Html.ActionLink("Message Manager","Create", "Messages")
-                @Html.ActionLink("View Details","Details", new { id = item.ApartmentID })
-            </td>
+    <td>
+        @*TODO: the last argument is the information i want to send to the pages *@
+        @Html.ActionLink("Appointment", "Create", "Appointments", new { id = item.AddressID }, new { user = User.Identity.Name }) |
+        @Html.ActionLink("Message Manager", "Create", "Messages", new { id = item.ApartmentID }, new { user = User.Identity.Name }) |
+        @Html.ActionLink("View Details", "Details", new { id = item.ApartmentID })
+    </td>
         }
     </tr>
     }

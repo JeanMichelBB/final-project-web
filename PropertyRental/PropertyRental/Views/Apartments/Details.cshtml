@@ -93,6 +93,17 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ApartmentID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (!User.IsInRole("Potential Tenant"))
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ApartmentID }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
+    else
+    {
+        <p>
+        @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
 </p>

@@ -118,7 +118,6 @@
     <Compile Include="Controllers\AppointmentsController.cs" />
     <Compile Include="Controllers\LoginsController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,11 +178,9 @@
     <Compile Include="Models\Status.cs">
       <DependentUpon>PropertyRentalDBContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TenantModel.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>PropertyRentalDBContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UsersRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -211,8 +208,6 @@
     <Content Include="Views\Apartments\Details.cshtml" />
     <Content Include="Views\Apartments\Edit.cshtml" />
     <Content Include="Views\Apartments\Index.cshtml" />
-    <Content Include="Views\Tenant\Index.cshtml" />
-    <Content Include="Views\Tenant\Appointment.cshtml" />
     <Content Include="Views\Appointments\Create.cshtml" />
     <Content Include="Views\Appointments\Delete.cshtml" />
     <Content Include="Views\Appointments\Details.cshtml" />
@@ -223,10 +218,6 @@
     <Content Include="Views\Messages\Details.cshtml" />
     <Content Include="Views\Messages\Edit.cshtml" />
     <Content Include="Views\Messages\Index.cshtml" />
-    <Content Include="Views\Tenant\CreateMessage.cshtml" />
-    <Content Include="Views\Tenant\DeleteMessage.cshtml" />
-    <Content Include="Views\Tenant\DetailsMessage.cshtml" />
-    <Content Include="Views\Tenant\MessageIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

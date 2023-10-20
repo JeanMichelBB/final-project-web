@@ -15,11 +15,31 @@ namespace PropertyRental.Controllers
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Appointments
-        public ActionResult Index()
-        {
-            var appointments = db.Appointments.Include(a => a.Address).Include(a => a.User).Include(a => a.User1);
-            return View(appointments.ToList());
-        }
+public ActionResult Index()
+{
+    if (User.IsInRole("Potential Tenant"))
+    {
+        User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+
+        var appointments = db.Appointments
+            .Include(a => a.Address)
+            .Include(a => a.User)
+            .Include(a => a.User1)
+            .Where(a => a.TenantID == user.UserID); // Filter appointments for the current user
+
+        return View(appointments.ToList());
+    }
+    else
+    {
+        var appointments = db.Appointments
+            .Include(a => a.Address)
+            .Include(a => a.User)
+            .Include(a => a.User1);
+
+        return View(appointments.ToList());
+    }
+}
+
 
         // GET: Appointments/Details/5
         public ActionResult Details(int? id)
@@ -37,11 +57,28 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Appointments/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
+            // find the aartment by id
+            var model = db.Apartments.Find(id);
+            // get the tenant id
+            User tenant = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+
+            if (User.IsInRole("Potential Tenant"))
+            {
+                // show only the apartments form model.AddressID
+                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == model.AddressID), "AddressID", "StreetName");
+                //ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", model.AddressID);
+                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == model.PropertyManagerID), "UserID", "FirstName");
+                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == tenant.UserID), "UserID", "FirstName");
+            }
+            else
+            {
+                ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
+                ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
+            }
+
             return View();
         }
 
