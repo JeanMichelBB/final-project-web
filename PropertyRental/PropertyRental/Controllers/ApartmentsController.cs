@@ -18,11 +18,20 @@ namespace PropertyRental.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var apartments = db.Apartments.Include(a => a.Address).Include(a => a.Building).Include(a => a.User).Include(a => a.Status);
+            IQueryable<Apartment> apartments;
+            // Show only the apartments that are available to the Tenants
+            if (User.IsInRole("Potential Tenant"))
+            {
+                apartments = db.Apartments.Include(a => a.Address).Include(a => a.Building).Include(a => a.User).Include(a => a.Status).Where(a => a.StatusID == 1);
+            } else
+            {
+                apartments = db.Apartments.Include(a => a.Address).Include(a => a.Building).Include(a => a.User).Include(a => a.Status);
+            }
             return View(apartments.ToList());
         }
 
         // GET: Apartments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)

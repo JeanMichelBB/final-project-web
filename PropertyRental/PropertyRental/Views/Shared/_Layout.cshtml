@@ -18,11 +18,6 @@
                     {
                         <li><a>Hello - @User.Identity.Name</a></li>
                         <li>@Html.ActionLink("Logout", "Logout", "Accounts")</li>
-
-                        if (User.IsInRole("Admin"))
-                        {
-                            <p>Holi Admin</p>
-                        }
                     }
                     else
                     {

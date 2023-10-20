@@ -5,7 +5,7 @@
 }
 
 <h2>Index</h2>
-@if (User.IsInRole("Admin"))
+@if (!User.IsInRole("Potential Tenant"))
 {
     <p>
         @Html.ActionLink("Create New", "Create")
@@ -38,10 +38,10 @@
             @Html.DisplayNameFor(model => model.Building.Amenities)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
+            Property Manager
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Status.StatusName)
+            Status
         </th>
         <th></th>
     </tr>
@@ -74,16 +74,26 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.User.FirstName)
+            @Html.DisplayFor(modelItem => item.User.LastName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Status.StatusName)
         </td>
-        @if (User.IsInRole("Admin"))
+        @if (!User.IsInRole("Potential Tenant"))
         {
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ApartmentID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ApartmentID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ApartmentID })
+            </td>
+        }
+        else
+        {
+            <td>
+                @*TODO: the last argument is the information i want to send to the pages *@
+                @Html.ActionLink("Appointment", "Create", "Appointments") |
+                @Html.ActionLink("Message Manager","Create", "Messages")
+                @Html.ActionLink("View Details","Details", new { id = item.ApartmentID })
             </td>
         }
     </tr>

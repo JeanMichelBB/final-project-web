@@ -44,9 +44,9 @@ namespace PropertyRental.Controllers
                             case 1: // Admin
                                 return RedirectToAction("Index", "Apartments");
                             case 2: // Property Owner
-                                return RedirectToAction("dashboard", "PropertyOwner");
+                                return RedirectToAction("Index", "Apartments");
                             case 3: // Property Manager
-                                return RedirectToAction("dashboard", "PropertyManager");
+                                return RedirectToAction("Index", "Apartments");
                             case 4: // Tenant
                                 return RedirectToAction("Index", "Apartments");
                             default:

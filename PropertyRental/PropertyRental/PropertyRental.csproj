@@ -183,6 +183,8 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>PropertyRentalDBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UsersRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
