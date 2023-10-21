@@ -49,11 +49,12 @@ namespace PropertyRental.Controllers
         [Authorize]
         public ActionResult Create(int? id)
         {
+            var user = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name);
             if (User.IsInRole("Potential Tenant"))
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
                 
-                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == userID), "UserID", "FirstName");
+                ViewBag.SenderID = new SelectList(db.Users.Where(predicate: u => u.UserID == user.UserID), "UserID", "FirstName");
                 // reviver id is null
                 if (id != null)
                 {
