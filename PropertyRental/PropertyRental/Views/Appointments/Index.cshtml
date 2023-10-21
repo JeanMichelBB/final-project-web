@@ -22,38 +22,48 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Timestamp)
+                Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.StreetName)
+                Time
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.FirstName)
+                Address
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User1.FirstName)
+                @Html.DisplayNameFor(model => model.PropertyManager.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PotentialTenant.FirstName)
             </th>
             <th></th>
         </tr>
 
     @foreach (var item in Model) {
         <tr>
+            @{
+                string date = item.Timestamp.Value.ToShortDateString();
+                string time = item.Timestamp.Value.ToShortTimeString();
+            }
             <td>
-                @Html.DisplayFor(modelItem => item.Timestamp)
+                @Html.DisplayFor(modelItem => date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => time)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address.StreetName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
+                @Html.DisplayFor(modelItem => item.PropertyManager.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User1.FirstName)
+                @Html.DisplayFor(modelItem => item.PotentialTenant.FirstName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.AppointmentID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.AppointmentID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.AppointmentID })
+                @Html.ActionLink("Reschedule", "Edit", new { id = item.AppointmentID }) |
+                @Html.ActionLink("See details", "Details", new { id = item.AppointmentID }) |
+                @Html.ActionLink("Cancel", "Delete", new { id = item.AppointmentID })
             </td>
         </tr>
     }

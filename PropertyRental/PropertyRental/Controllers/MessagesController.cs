@@ -22,8 +22,8 @@ namespace PropertyRental.Controllers
 
             var messages = db.Messages
                 .Include(m => m.MessageStatus)
-                .Include(m => m.User)
-                .Include(m => m.User1)
+                .Include(m => m.Receiver)
+                .Include(m => m.Sender)
                 .Where(m => m.SenderID == userID || m.ReceiverID == userID);
 
             return View(messages.ToList());

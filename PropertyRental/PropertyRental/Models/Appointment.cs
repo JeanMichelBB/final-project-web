@@ -21,7 +21,7 @@ namespace PropertyRental.Models
         public int AddressID { get; set; }
     
         public virtual Address Address { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual User PropertyManager { get; set; }
+        public virtual User PotentialTenant { get; set; }
     }
 }

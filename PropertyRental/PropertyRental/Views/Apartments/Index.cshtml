@@ -14,10 +14,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfRooms)
+            Address
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Amenities)
+            Apartment Amenities
+        </th>
+        <th>
+            N of Rooms
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Area)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
@@ -27,15 +33,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ConstructionYear)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Area)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Building.Amenities)
         </th>
         <th>
             Property Manager
@@ -49,10 +46,19 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.NumberOfRooms)
+            @Html.DisplayFor(modelItem => item.Address.StreetName)
+            @Html.DisplayFor(modelItem => item.Address.StreetNumber)
+            @Html.DisplayFor(modelItem => item.Address.City)
+            @Html.DisplayFor(modelItem => item.Address.Province)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Amenities)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfRooms)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Area)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Price)
@@ -62,15 +68,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ConstructionYear)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Area)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address.StreetName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Building.Amenities)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.User.FirstName)
@@ -89,12 +86,11 @@
         }
         else
         {
-    <td>
-        @*TODO: the last argument is the information i want to send to the pages *@
-        @Html.ActionLink("Appointment", "Create", "Appointments", new { id = item.AddressID }, new { user = User.Identity.Name }) |
-        @Html.ActionLink("Message Manager", "Create", "Messages", new { id = item.ApartmentID }, new { user = User.Identity.Name }) |
-        @Html.ActionLink("View Details", "Details", new { id = item.ApartmentID })
-    </td>
+            <td>
+                @Html.ActionLink("Appointment", "Create", "Appointments", new { id = item.AddressID }, new { user = User.Identity.Name }) |
+                @Html.ActionLink("Message Manager", "Create", "Messages", new { id = item.ApartmentID }, new { user = User.Identity.Name }) |
+                @Html.ActionLink("View Details", "Details", new { id = item.ApartmentID })
+            </td>
         }
     </tr>
     }

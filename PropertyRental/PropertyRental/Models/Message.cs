@@ -23,7 +23,7 @@ namespace PropertyRental.Models
         public int MessageStatusID { get; set; }
     
         public virtual MessageStatus MessageStatus { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual User Receiver { get; set; }
+        public virtual User Sender { get; set; }
     }
 }

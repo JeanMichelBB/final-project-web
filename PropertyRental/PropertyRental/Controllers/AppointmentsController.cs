@@ -24,8 +24,8 @@ namespace PropertyRental.Controllers
 
                 var appointments = db.Appointments
                     .Include(a => a.Address)
-                    .Include(a => a.User)
-                    .Include(a => a.User1)
+                    .Include(a => a.PropertyManager)
+                    .Include(a => a.PotentialTenant)
                     .Where(a => a.TenantID == userID); // Filter appointments for the current user
 
                 return View(appointments.ToList());
@@ -34,8 +34,8 @@ namespace PropertyRental.Controllers
             {
                 var appointments = db.Appointments
                     .Include(a => a.Address)
-                    .Include(a => a.User)
-                    .Include(a => a.User1);
+                    .Include(a => a.PropertyManager)
+                    .Include(a => a.PotentialTenant);
 
                 return View(appointments.ToList());
             }
@@ -77,7 +77,8 @@ namespace PropertyRental.Controllers
                 ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
                 ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
             }
-
+            // Create a select list of hours from 9am to 5pm
+            ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");
             return View();
         }
 
@@ -87,19 +88,29 @@ namespace PropertyRental.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,Timestamp,AddressID")] Appointment appointment)
+        public ActionResult Create([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,SelectedDate,SelectedTime,AddressID")] AppointmentViewModel appointmentView)
         {
+            Appointment appointment;
             if (ModelState.IsValid)
             {
+                DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
+                appointmentView.Timestamp = selectedDateTime;
+                appointment = new Appointment
+                {
+                    PropertyManagerID = appointmentView.PropertyManagerID,
+                    TenantID = appointmentView.TenantID,
+                    Timestamp = appointmentView.Timestamp,
+                    AddressID = appointmentView.AddressID
+                };
                 db.Appointments.Add(appointment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointment.AddressID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointment.PropertyManagerID);
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointment.TenantID);
-            return View(appointment);
+            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointmentView.AddressID);
+            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.PropertyManagerID);
+            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.TenantID);
+            return View(appointmentView);
         }
 
         // GET: Appointments/Edit/5

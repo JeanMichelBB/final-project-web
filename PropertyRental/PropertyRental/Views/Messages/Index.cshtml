@@ -34,10 +34,10 @@ else
                 @Html.DisplayNameFor(model => model.MessageStatus.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.FirstName)
+                @Html.DisplayNameFor(model => model.Receiver.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User1.FirstName)
+                @Html.DisplayNameFor(model => model.Sender.FirstName)
             </th>
             <th></th>
         </tr>
@@ -58,10 +58,10 @@ else
                     @Html.DisplayFor(modelItem => item.MessageStatus.Status)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                    @Html.DisplayFor(modelItem => item.Receiver.FirstName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.User1.FirstName)
+                    @Html.DisplayFor(modelItem => item.Sender.FirstName)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.MessageID }) |

@@ -24,7 +24,7 @@ namespace PropertyRental.Models
     
         public virtual Apartment Apartment { get; set; }
         public virtual EventType EventType { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual User PropertyManager { get; set; }
+        public virtual User PropertyOwner { get; set; }
     }
 }

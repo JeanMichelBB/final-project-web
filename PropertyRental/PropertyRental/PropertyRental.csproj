@@ -133,6 +133,7 @@
     <Compile Include="Models\Appointment.cs">
       <DependentUpon>PropertyRentalDBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppointmentViewModel.cs" />
     <Compile Include="Models\Building.cs">
       <DependentUpon>PropertyRentalDBContext.tt</DependentUpon>
     </Compile>

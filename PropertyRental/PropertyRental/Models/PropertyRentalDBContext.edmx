@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PropertyRentalDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PropertyRentalDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Addresses">
           <Key>
             <PropertyRef Name="AddressID" />
@@ -452,8 +452,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PropertyRentalDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -514,8 +513,8 @@
           <Property Name="Timestamp" Type="DateTime" Precision="3" />
           <Property Name="AddressID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Address" Relationship="Self.FK__Appointme__Addre__398D8EEE" FromRole="Appointments" ToRole="Addresses" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Appointme__Prope__37A5467C" FromRole="Appointments" ToRole="Users" />
-          <NavigationProperty Name="User1" Relationship="Self.FK__Appointme__Tenan__38996AB5" FromRole="Appointments" ToRole="Users" />
+          <NavigationProperty Name="PropertyManager" Relationship="Self.FK__Appointme__Prope__37A5467C" FromRole="Appointments" ToRole="Users" />
+          <NavigationProperty Name="PotentialTenant" Relationship="Self.FK__Appointme__Tenan__38996AB5" FromRole="Appointments" ToRole="Users" />
         </EntityType>
         <EntityType Name="Building">
           <Key>
@@ -542,8 +541,8 @@
           <Property Name="EventTypeID" Type="Int32" />
           <NavigationProperty Name="Apartment" Relationship="Self.FK__Events__Apartmen__4BAC3F29" FromRole="Events" ToRole="Apartments" />
           <NavigationProperty Name="EventType" Relationship="Self.FK__Events__EventTyp__4CA06362" FromRole="Events" ToRole="EventTypes" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Events__Property__49C3F6B7" FromRole="Events" ToRole="Users" />
-          <NavigationProperty Name="User1" Relationship="Self.FK__Events__Property__4AB81AF0" FromRole="Events" ToRole="Users" />
+          <NavigationProperty Name="PropertyManager" Relationship="Self.FK__Events__Property__49C3F6B7" FromRole="Events" ToRole="Users" />
+          <NavigationProperty Name="PropertyOwner" Relationship="Self.FK__Events__Property__4AB81AF0" FromRole="Events" ToRole="Users" />
         </EntityType>
         <EntityType Name="EventType">
           <Key>
@@ -575,8 +574,8 @@
           <Property Name="Timestamp" Type="DateTime" Precision="3" />
           <Property Name="MessageStatusID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="MessageStatus" Relationship="Self.FK__Messages__Messag__3E52440B" FromRole="Messages" ToRole="MessageStatuses" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Messages__Receiv__3D5E1FD2" FromRole="Messages" ToRole="Users" />
-          <NavigationProperty Name="User1" Relationship="Self.FK__Messages__Sender__3C69FB99" FromRole="Messages" ToRole="Users" />
+          <NavigationProperty Name="Receiver" Relationship="Self.FK__Messages__Receiv__3D5E1FD2" FromRole="Messages" ToRole="Users" />
+          <NavigationProperty Name="Sender" Relationship="Self.FK__Messages__Sender__3C69FB99" FromRole="Messages" ToRole="Users" />
         </EntityType>
         <EntityType Name="MessageStatus">
           <Key>
