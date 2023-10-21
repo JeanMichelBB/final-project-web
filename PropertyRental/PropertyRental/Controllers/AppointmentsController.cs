@@ -15,33 +15,35 @@ namespace PropertyRental.Controllers
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Appointments
-public ActionResult Index()
-{
-    if (User.IsInRole("Potential Tenant"))
-    {
-        User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+        [Authorize]
+        public ActionResult Index()
+        {
+            if (User.IsInRole("Potential Tenant"))
+            {
+                var userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
 
-        var appointments = db.Appointments
-            .Include(a => a.Address)
-            .Include(a => a.User)
-            .Include(a => a.User1)
-            .Where(a => a.TenantID == user.UserID); // Filter appointments for the current user
+                var appointments = db.Appointments
+                    .Include(a => a.Address)
+                    .Include(a => a.User)
+                    .Include(a => a.User1)
+                    .Where(a => a.TenantID == userID); // Filter appointments for the current user
 
-        return View(appointments.ToList());
-    }
-    else
-    {
-        var appointments = db.Appointments
-            .Include(a => a.Address)
-            .Include(a => a.User)
-            .Include(a => a.User1);
+                return View(appointments.ToList());
+            }
+            else
+            {
+                var appointments = db.Appointments
+                    .Include(a => a.Address)
+                    .Include(a => a.User)
+                    .Include(a => a.User1);
 
-        return View(appointments.ToList());
-    }
-}
+                return View(appointments.ToList());
+            }
+        }
 
 
         // GET: Appointments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -57,20 +59,17 @@ public ActionResult Index()
         }
 
         // GET: Appointments/Create
+        [Authorize]
         public ActionResult Create(int? id)
         {
-            // find the aartment by id
-            var model = db.Apartments.Find(id);
-            // get the tenant id
-            User tenant = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+            var apartment = db.Apartments.Find(id);
+            var tenantID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
 
             if (User.IsInRole("Potential Tenant"))
             {
-                // show only the apartments form model.AddressID
-                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == model.AddressID), "AddressID", "StreetName");
-                //ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", model.AddressID);
-                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == model.PropertyManagerID), "UserID", "FirstName");
-                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == tenant.UserID), "UserID", "FirstName");
+                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == apartment.AddressID), "AddressID", "StreetName");
+                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == apartment.PropertyManagerID), "UserID", "FirstName");
+                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == tenantID), "UserID", "FirstName");
             }
             else
             {
@@ -87,6 +86,7 @@ public ActionResult Index()
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,Timestamp,AddressID")] Appointment appointment)
         {
             if (ModelState.IsValid)
@@ -103,6 +103,7 @@ public ActionResult Index()
         }
 
         // GET: Appointments/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -125,6 +126,7 @@ public ActionResult Index()
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,Timestamp,AddressID")] Appointment appointment)
         {
             if (ModelState.IsValid)
@@ -140,6 +142,7 @@ public ActionResult Index()
         }
 
         // GET: Appointments/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -157,6 +160,7 @@ public ActionResult Index()
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Appointment appointment = db.Appointments.Find(id);

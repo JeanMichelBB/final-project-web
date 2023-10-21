@@ -13,23 +13,24 @@ namespace PropertyRental.Controllers
     public class MessagesController : Controller
     {
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
-
+        private int userID;
         // GET: Messages
+        [Authorize]
         public ActionResult Index()
         {
-            User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
+            userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
 
             var messages = db.Messages
                 .Include(m => m.MessageStatus)
                 .Include(m => m.User)
                 .Include(m => m.User1)
-                .Where(m => m.SenderID == user.UserID || m.ReceiverID == user.UserID);
+                .Where(m => m.SenderID == userID || m.ReceiverID == userID);
 
             return View(messages.ToList());
-
         }
 
         // GET: Messages/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -45,20 +46,20 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Messages/Create
+        [Authorize]
         public ActionResult Create(int? id)
         {
-            User user = db.Users.FirstOrDefault(u => u.FirstName == User.Identity.Name);
             if (User.IsInRole("Potential Tenant"))
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
                 
-                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == user.UserID), "UserID", "FirstName");
+                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == userID), "UserID", "FirstName");
                 // reviver id is null
                 if (id != null)
                 {
-                    var model = db.Apartments.Find(id);
+                    var apartment = db.Apartments.Find(id);
 
-                    ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID == model.PropertyManagerID), "UserID", "FirstName");
+                    ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID == apartment.PropertyManagerID), "UserID", "FirstName");
                 }
                 else
                 {
@@ -69,7 +70,7 @@ namespace PropertyRental.Controllers
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
                 ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
-                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == user.UserID), "UserID", "FirstName");
+                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == userID), "UserID", "FirstName");
             }
                 return View();
         }
@@ -79,6 +80,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "MessageID,SenderID,ReceiverID,Subject,MessageBody,Timestamp,MessageStatusID")] Message message)
         {
             if (ModelState.IsValid)
@@ -95,6 +97,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Messages/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -117,6 +120,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin")]
         public ActionResult Edit([Bind(Include = "MessageID,SenderID,ReceiverID,Subject,MessageBody,Timestamp,MessageStatusID")] Message message)
         {
             if (ModelState.IsValid)
@@ -132,6 +136,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Messages/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -149,6 +154,7 @@ namespace PropertyRental.Controllers
         // POST: Messages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Message message = db.Messages.Find(id);

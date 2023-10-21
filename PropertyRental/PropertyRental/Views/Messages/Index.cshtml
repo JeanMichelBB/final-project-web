@@ -4,60 +4,72 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Messages</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Subject)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MessageBody)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MessageStatus.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User1.FirstName)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Subject)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MessageBody)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Timestamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MessageStatus.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User1.FirstName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MessageID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MessageID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MessageID })
-        </td>
-    </tr>
+@if (!User.IsInRole("Potential Tenant"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
 }
 
-</table>
+@if (Model.Count() == 0)
+{
+    <p>You don't have any messages.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageBody)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageStatus.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User1.FirstName)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MessageBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MessageStatus.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User1.FirstName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.MessageID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.MessageID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.MessageID })
+                </td>
+            </tr>
+        }
+
+    </table>
+}
