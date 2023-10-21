@@ -55,8 +55,8 @@ namespace PropertyRental.Controllers
                     }
                 }
                 ModelState.AddModelError("", "Invalid username or password!");
-                return View();
             }
+            return View();
         }
 
 
@@ -102,6 +102,7 @@ namespace PropertyRental.Controllers
                     context.Addresses.Add(address);
 
                     // Save changes to the database
+                    
                     context.SaveChanges();
 
                     return RedirectToAction("Login");
