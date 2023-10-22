@@ -12,8 +12,5 @@ namespace PropertyRental.Models
         public string SelectedTime { get; set; }
         [Display(Name = "Date")]
         public string SelectedDate { get; set; }
-
-/*        [Display(Name = "Property Manager")]
-        public new int PropertyManagerID { get; set; }*/
     }
 }

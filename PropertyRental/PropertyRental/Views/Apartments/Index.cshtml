@@ -79,17 +79,18 @@
         @if (!User.IsInRole("Potential Tenant"))
         {
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ApartmentID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ApartmentID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ApartmentID })
+                @Html.ActionLink("Edit", "Edit", new { appartmentID = item.ApartmentID }) |
+                @Html.ActionLink("Details", "Details", new { appartmentID = item.ApartmentID }) |
+                @Html.ActionLink("Delete", "Delete", new { appartmentID = item.ApartmentID })
             </td>
         }
         else
         {
             <td>
-                @Html.ActionLink("Appointment", "Create", "Appointments", new { id = item.AddressID }, new { user = User.Identity.Name }) |
-                @Html.ActionLink("Message Manager", "Create", "Messages", new { id = item.ApartmentID }, new { user = User.Identity.Name }) |
-                @Html.ActionLink("View Details", "Details", new { id = item.ApartmentID })
+                @Html.ActionLink("Appointment", "Create", "Appointments", new { apartmentID = item.ApartmentID }, new { user = User.Identity.Name }) |
+                @* TODO: Review we are sending the right user id*@
+                @Html.ActionLink("Message Manager", "Create", "Messages", new { apartmentID = item.ApartmentID }, new { user = User.Identity.Name }) |
+                @Html.ActionLink("View Details", "Details", new { apartmentID = item.ApartmentID })
             </td>
         }
     </tr>

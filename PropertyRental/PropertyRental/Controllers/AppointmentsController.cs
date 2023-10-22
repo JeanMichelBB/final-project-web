@@ -41,14 +41,13 @@ namespace PropertyRental.Controllers
             }
         }
 
-
         // GET: Appointments/Details/5
         [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Appointment appointment = db.Appointments.Find(id);
             if (appointment == null)
@@ -60,23 +59,50 @@ namespace PropertyRental.Controllers
 
         // GET: Appointments/Create
         [Authorize]
-        public ActionResult Create(int? id)
+        public ActionResult Create(int? apartmentID)
         {
-            var apartment = db.Apartments.Find(id);
-            var tenantID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
-
+            
             if (User.IsInRole("Potential Tenant"))
             {
-                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == apartment.AddressID), "AddressID", "StreetName");
-                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == apartment.PropertyManagerID), "UserID", "FirstName");
-                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == tenantID), "UserID", "FirstName");
+                if (apartmentID == null)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                var apartment = db.Apartments.Find(apartmentID);
+                var tenantID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
+
+                // Show only the address of the selected appartment
+                ViewBag.AddressID = db.Addresses
+                    .Where(a => a.AddressID == apartment.AddressID)
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Show only the property manager of the selected appartment
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.UserID == apartment.PropertyManagerID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Show only the current user
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.UserID == tenantID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
             else
             {
-                ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
-                ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
-                ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.AddressID = db.Addresses
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Select only the users that are property managers
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Select only the users that are potential tenants
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.RoleID == 3)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
+
             // Create a select list of hours from 9am to 5pm
             ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");
             return View();
@@ -106,10 +132,38 @@ namespace PropertyRental.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            // If we got this far, something failed, redisplay form as in the create view
+            if (User.IsInRole("Potential Tenant"))
+            {
+                ViewBag.AddressID = db.Addresses
+                    .Where(a => a.AddressID == appointmentView.AddressID)
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
 
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointmentView.AddressID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.PropertyManagerID);
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.TenantID);
+                // Show only the property manager of the selected appartment
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.UserID == appointmentView.PropertyManagerID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Show only the current user
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.UserID == appointmentView.TenantID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            } else
+            {
+                ViewBag.AddressID = db.Addresses
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Select only the users that are property managers
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Select only the users that are potential tenants
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.RoleID == 3)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            }
+
             return View(appointmentView);
         }
 
@@ -138,15 +192,34 @@ namespace PropertyRental.Controllers
             };
             if (User.IsInRole("Potential Tenant"))
             {
-                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == appointment.AddressID), "AddressID", "StreetName");
-                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == appointment.PropertyManagerID), "UserID", "FirstName");
-                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == appointment.TenantID), "UserID", "FirstName");
+                ViewBag.AddressID = db.Addresses
+                   .Where(a => a.AddressID == appointmentView.AddressID)
+                   .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Show only the property manager of the selected appartment
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.UserID == appointmentView.PropertyManagerID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Show only the current user
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.UserID == appointmentView.TenantID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
             else
             {
-                ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
-                ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
-                ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.AddressID = db.Addresses
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Select only the users that are property managers
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Select only the users that are potential tenants
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.RoleID == 3)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
 
             ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");

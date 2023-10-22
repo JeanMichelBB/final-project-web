@@ -1,7 +1,7 @@
 ﻿@model PropertyRental.Models.Appointment
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Cancel appointment";
 }
 
 <h2>Delete</h2>
@@ -12,36 +12,56 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Timestamp)
+            Date
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Timestamp)
+            @{
+                string date = Model.Timestamp.Value.ToShortDateString();
+            }
+            @Html.DisplayFor(model => date)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
+            Time
+        </dt>
+
+        <dd>
+            @{
+                string time = Model.Timestamp.Value.ToShortTimeString();
+            }
+            @Html.DisplayFor(model => time)
+        </dd>
+
+        <dt>
+            Address
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Address.StreetName)
+            @Html.DisplayFor(model => model.Address.StreetNumber)
+            @Html.DisplayFor(model => model.Address.City)
+            @Html.DisplayFor(model => model.Address.Province)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PropertyManager.FirstName)
+            Property Manager
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PropertyManager.FirstName)
+            @Html.DisplayFor(model => model.PropertyManager.LastName)
         </dd>
+        @if (!User.IsInRole("Potential Tenant"))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PotentialTenant.FirstName)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PotentialTenant.FirstName)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PotentialTenant.FirstName)
+            </dd>
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.PotentialTenant.FirstName)
-        </dd>
 
     </dl>
 
@@ -49,7 +69,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Cancel Appointment" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

@@ -10,7 +10,7 @@
     <h4>Appointment</h4>
     <hr />
     <dl class="dl-horizontal">
-        
+
         <dt>
             Date
         </dt>
@@ -51,17 +51,18 @@
             @Html.DisplayFor(model => model.PropertyManager.FirstName)
             @Html.DisplayFor(model => model.PropertyManager.LastName)
         </dd>
+        @if (!User.IsInRole("Potential Tenant"))
+        {
+            <dt>
+                Potential Tenant
+            </dt>
 
-        <dt>
-            Potential Tenant 
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PotentialTenant.FirstName)
-            @Html.DisplayFor(model => model.PotentialTenant.LastName)
-        </dd>
-
-    </dl>
+            <dd>
+                @Html.DisplayFor(model => model.PotentialTenant.FirstName)
+                @Html.DisplayFor(model => model.PotentialTenant.LastName)
+            </dd>
+        }
+        </dl>
 </div>
 <p>
     @Html.ActionLink("Reschedule", "Edit", new { id = Model.AppointmentID }) |
