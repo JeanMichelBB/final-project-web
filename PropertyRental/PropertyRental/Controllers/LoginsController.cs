@@ -10,12 +10,12 @@ using PropertyRental.Models;
 
 namespace PropertyRental.Controllers
 {
-    [Authorize]
     public class LoginsController : Controller
     {
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Logins
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var logins = db.Logins.Include(l => l.User);
@@ -38,6 +38,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Logins/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName");
@@ -49,6 +50,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "LoginID,UserID,Email,Password")] Login login)
         {
             if (ModelState.IsValid)
@@ -63,6 +65,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Logins/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -83,6 +86,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "LoginID,UserID,Email,Password")] Login login)
         {
             if (ModelState.IsValid)
@@ -96,6 +100,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Logins/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -113,6 +118,7 @@ namespace PropertyRental.Controllers
         // POST: Logins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Login login = db.Logins.Find(id);
