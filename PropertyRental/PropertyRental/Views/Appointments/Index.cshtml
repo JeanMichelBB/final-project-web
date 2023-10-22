@@ -31,10 +31,7 @@ else
                 Address
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PropertyManager.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PotentialTenant.FirstName)
+               Property Manager
             </th>
             <th></th>
         </tr>
@@ -53,16 +50,18 @@ else
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address.StreetName)
+                @Html.DisplayFor(modelItem => item.Address.StreetNumber)
+                @Html.DisplayFor(modelItem => item.Address.City)
+                @Html.DisplayFor(modelItem => item.Address.Province)
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PropertyManager.FirstName)
+                @Html.DisplayFor(modelItem => item.PropertyManager.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PotentialTenant.FirstName)
-            </td>
-            <td>
-                @Html.ActionLink("Reschedule", "Edit", new { id = item.AppointmentID }) |
                 @Html.ActionLink("See details", "Details", new { id = item.AppointmentID }) |
+                @Html.ActionLink("Reschedule", "Edit", new { id = item.AppointmentID }) |
                 @Html.ActionLink("Cancel", "Delete", new { id = item.AppointmentID })
             </td>
         </tr>

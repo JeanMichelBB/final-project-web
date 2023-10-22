@@ -114,7 +114,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Appointments/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -122,14 +122,35 @@ namespace PropertyRental.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Appointment appointment = db.Appointments.Find(id);
+            
             if (appointment == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointment.AddressID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointment.PropertyManagerID);
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointment.TenantID);
-            return View(appointment);
+            AppointmentViewModel appointmentView = new AppointmentViewModel
+            {
+                AppointmentID = appointment.AppointmentID,
+                PropertyManagerID = appointment.PropertyManagerID,
+                TenantID = appointment.TenantID,
+                SelectedDate = appointment.Timestamp.Value.ToShortDateString(),
+                SelectedTime = appointment.Timestamp.Value.ToShortTimeString(),
+                AddressID = appointment.AddressID
+            };
+            if (User.IsInRole("Potential Tenant"))
+            {
+                ViewBag.AddressID = new SelectList(db.Addresses.Where(a => a.AddressID == appointment.AddressID), "AddressID", "StreetName");
+                ViewBag.PropertyManagerID = new SelectList(db.Users.Where(u => u.UserID == appointment.PropertyManagerID), "UserID", "FirstName");
+                ViewBag.TenantID = new SelectList(db.Users.Where(u => u.UserID == appointment.TenantID), "UserID", "FirstName");
+            }
+            else
+            {
+                ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
+                ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName");
+            }
+
+            ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");
+            return View(appointmentView);
         }
 
         // POST: Appointments/Edit/5
@@ -137,23 +158,24 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,Timestamp,AddressID")] Appointment appointment)
+        [Authorize]
+        public ActionResult Edit([Bind(Include = "AppointmentID,PropertyManagerID,TenantID,SelectedDate,SelectedTime,AddressID")] AppointmentViewModel appointmentView)
         {
             if (ModelState.IsValid)
             {
+                var appointment = db.Appointments.Find(appointmentView.AppointmentID);
                 db.Entry(appointment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointment.AddressID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointment.PropertyManagerID);
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointment.TenantID);
-            return View(appointment);
+            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointmentView.AddressID);
+            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.PropertyManagerID);
+            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.TenantID);
+            return View(appointmentView);
         }
 
         // GET: Appointments/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -171,7 +193,7 @@ namespace PropertyRental.Controllers
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Appointment appointment = db.Appointments.Find(id);

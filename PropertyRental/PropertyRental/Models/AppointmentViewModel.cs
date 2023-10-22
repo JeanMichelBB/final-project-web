@@ -13,12 +13,7 @@ namespace PropertyRental.Models
         [Display(Name = "Date")]
         public string SelectedDate { get; set; }
 
-/*        public DateTime Timestamp
-        {
-            get
-            {
-                return SelectedDate.Date(SelectedHour).AddMinutes(SelectedMinute);
-            }
-        }*/
+/*        [Display(Name = "Property Manager")]
+        public new int PropertyManagerID { get; set; }*/
     }
 }

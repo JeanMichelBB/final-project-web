@@ -10,41 +10,60 @@
     <h4>Appointment</h4>
     <hr />
     <dl class="dl-horizontal">
+        
         <dt>
-            @Html.DisplayNameFor(model => model.Timestamp)
+            Date
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Timestamp)
+            @{
+                string date = Model.Timestamp.Value.ToShortDateString();
+            }
+            @Html.DisplayFor(model => date)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
+            Time
+        </dt>
+
+        <dd>
+            @{
+                string time = Model.Timestamp.Value.ToShortTimeString();
+            }
+            @Html.DisplayFor(model => time)
+        </dd>
+
+        <dt>
+            Address
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Address.StreetName)
+            @Html.DisplayFor(model => model.Address.StreetNumber),
+            @Html.DisplayFor(model => model.Address.City)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PropertyManager.FirstName)
+            Property Manager
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PropertyManager.FirstName)
+            @Html.DisplayFor(model => model.PropertyManager.LastName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PotentialTenant.FirstName)
+            Potential Tenant 
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PotentialTenant.FirstName)
+            @Html.DisplayFor(model => model.PotentialTenant.LastName)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.AppointmentID }) |
+    @Html.ActionLink("Reschedule", "Edit", new { id = Model.AppointmentID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
