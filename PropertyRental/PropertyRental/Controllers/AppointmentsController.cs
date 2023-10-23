@@ -94,12 +94,12 @@ namespace PropertyRental.Controllers
 
                 // Select only the users that are property managers
                 ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
 
                 // Select only the users that are potential tenants
                 ViewBag.TenantID = db.Users
-                    .Where(u => u.RoleID == 3)
+                    .Where(u => u.RoleID == 4)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
 
@@ -155,12 +155,12 @@ namespace PropertyRental.Controllers
 
                 // Select only the users that are property managers
                 ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
 
                 // Select only the users that are potential tenants
                 ViewBag.TenantID = db.Users
-                    .Where(u => u.RoleID == 3)
+                    .Where(u => u.RoleID == 4)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
 
@@ -169,13 +169,13 @@ namespace PropertyRental.Controllers
 
         // GET: Appointments/Edit/5
         [Authorize]
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? appointmentID)
         {
-            if (id == null)
+            if (appointmentID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Appointment appointment = db.Appointments.Find(id);
+            Appointment appointment = db.Appointments.Find(appointmentID);
             
             if (appointment == null)
             {
@@ -213,12 +213,12 @@ namespace PropertyRental.Controllers
 
                 // Select only the users that are property managers
                 ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
 
                 // Select only the users that are potential tenants
                 ViewBag.TenantID = db.Users
-                    .Where(u => u.RoleID == 3)
+                    .Where(u => u.RoleID == 4)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
 
@@ -236,8 +236,16 @@ namespace PropertyRental.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appointment = db.Appointments.Find(appointmentView.AppointmentID);
-                db.Entry(appointment).State = EntityState.Modified;
+                DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
+                appointmentView.Timestamp = selectedDateTime;
+                Appointment appointment = new Appointment
+                {
+                    PropertyManagerID = appointmentView.PropertyManagerID,
+                    TenantID = appointmentView.TenantID,
+                    Timestamp = appointmentView.Timestamp,
+                    AddressID = appointmentView.AddressID
+                };
+                db.Appointments.Add(appointment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -249,13 +257,13 @@ namespace PropertyRental.Controllers
 
         // GET: Appointments/Delete/5
         [Authorize]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? appointmentID)
         {
-            if (id == null)
+            if (appointmentID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Appointment appointment = db.Appointments.Find(id);
+            Appointment appointment = db.Appointments.Find(appointmentID);
             if (appointment == null)
             {
                 return HttpNotFound();
@@ -267,9 +275,9 @@ namespace PropertyRental.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int appointmentID)
         {
-            Appointment appointment = db.Appointments.Find(id);
+            Appointment appointment = db.Appointments.Find(appointmentID);
             db.Appointments.Remove(appointment);
             db.SaveChanges();
             return RedirectToAction("Index");

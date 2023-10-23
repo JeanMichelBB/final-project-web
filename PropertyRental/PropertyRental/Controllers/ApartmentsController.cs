@@ -57,7 +57,7 @@ namespace PropertyRental.Controllers
                 .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
             ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
             ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName");
             return View();
@@ -84,7 +84,7 @@ namespace PropertyRental.Controllers
                 .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
             ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
             ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName");
             return View(apartment);
@@ -110,7 +110,7 @@ namespace PropertyRental.Controllers
                 .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
             ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
             ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName", apartment.StatusID);
             return View(apartment);
@@ -137,7 +137,7 @@ namespace PropertyRental.Controllers
             });
             ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem {  Text = b.BuildingName, Value = b.BuildingID.ToString() });
             ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName", apartment.StatusID);
             return View(apartment);
@@ -157,7 +157,7 @@ namespace PropertyRental.Controllers
                 return HttpNotFound();
             }
             ViewBag.PropertyManagerID = db.Users
-                    .Where(u => u.RoleID == 2)
+                    .Where(u => u.RoleID == 3)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             return View(apartment);
         }
