@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using PropertyRental.Models;
 
 namespace PropertyRental.Controllers
@@ -119,18 +120,25 @@ namespace PropertyRental.Controllers
             Appointment appointment;
             if (ModelState.IsValid)
             {
-                DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
-                appointmentView.Timestamp = selectedDateTime;
-                appointment = new Appointment
+                if (appointmentView.SelectedDate.IsDateTime() && appointmentView.SelectedTime.IsDateTime())
                 {
-                    PropertyManagerID = appointmentView.PropertyManagerID,
-                    TenantID = appointmentView.TenantID,
-                    Timestamp = appointmentView.Timestamp,
-                    AddressID = appointmentView.AddressID
-                };
-                db.Appointments.Add(appointment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
+                    appointmentView.Timestamp = selectedDateTime;
+                    appointment = new Appointment
+                    {
+                        PropertyManagerID = appointmentView.PropertyManagerID,
+                        TenantID = appointmentView.TenantID,
+                        Timestamp = appointmentView.Timestamp,
+                        AddressID = appointmentView.AddressID
+                    };
+                    db.Appointments.Add(appointment);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+               }
+                else
+                {
+                    ModelState.AddModelError("SelectedDate", "Please enter a valid date");
+                }
             }
             // If we got this far, something failed, redisplay form as in the create view
             if (User.IsInRole("Potential Tenant"))
@@ -163,6 +171,7 @@ namespace PropertyRental.Controllers
                     .Where(u => u.RoleID == 4)
                     .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
+            ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");
 
             return View(appointmentView);
         }
@@ -236,22 +245,58 @@ namespace PropertyRental.Controllers
         {
             if (ModelState.IsValid)
             {
-                DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
-                appointmentView.Timestamp = selectedDateTime;
-                Appointment appointment = new Appointment
+                if (appointmentView.SelectedDate.IsDateTime() && appointmentView.SelectedTime.IsDateTime())
                 {
-                    PropertyManagerID = appointmentView.PropertyManagerID,
-                    TenantID = appointmentView.TenantID,
-                    Timestamp = appointmentView.Timestamp,
-                    AddressID = appointmentView.AddressID
-                };
-                db.Appointments.Add(appointment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
+                    appointmentView.Timestamp = selectedDateTime;
+                    Appointment appointment = new Appointment
+                    {
+                        PropertyManagerID = appointmentView.PropertyManagerID,
+                        TenantID = appointmentView.TenantID,
+                        Timestamp = appointmentView.Timestamp,
+                        AddressID = appointmentView.AddressID
+                    };
+                    db.Appointments.Add(appointment);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                } else
+                {
+                    ModelState.AddModelError("SelectedTime", "Please enter a valid time");
+                }
             }
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", appointmentView.AddressID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.PropertyManagerID);
-            ViewBag.TenantID = new SelectList(db.Users, "UserID", "FirstName", appointmentView.TenantID);
+            // If we got this far, something failed, redisplay form as in the create view
+            if (User.IsInRole("Potential Tenant"))
+            {
+                ViewBag.AddressID = db.Addresses
+                   .Where(a => a.AddressID == appointmentView.AddressID)
+                   .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Show only the property manager of the selected appartment
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.UserID == appointmentView.PropertyManagerID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Show only the current user
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.UserID == appointmentView.TenantID)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            }
+            else
+            {
+                ViewBag.AddressID = db.Addresses
+                    .Select(a => new SelectListItem { Text = a.StreetNumber + " " + a.StreetName + ", " + a.City + ", " + a.Province, Value = a.AddressID.ToString() });
+
+                // Select only the users that are property managers
+                ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 3)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+
+                // Select only the users that are potential tenants
+                ViewBag.TenantID = db.Users
+                    .Where(u => u.RoleID == 4)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            }
+            ViewBag.SelectedTime = new SelectList(Enumerable.Range(9, 9).Select(x => new SelectListItem { Text = x.ToString() + ":00", Value = x.ToString() + ":00" }), "Value", "Text");
             return View(appointmentView);
         }
 
