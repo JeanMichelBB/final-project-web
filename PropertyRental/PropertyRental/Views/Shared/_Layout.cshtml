@@ -16,15 +16,11 @@
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a>Hello - @User.Identity.Name</a></li>
+                        <li><a>Welcome @User.Identity.Name</a></li>
                         <li>@Html.ActionLink("Home", "Index", "Apartments")</li>
                         <li>@Html.ActionLink("Messages", "Index", "Messages")</li>
                         <li>@Html.ActionLink("Appointments", "Index", "Appointments")</li>
                         <li>@Html.ActionLink("Logout", "Logout", "Accounts")</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("Login", "Login", "Accounts")</li>
                     }
                 </ul>
             </div>

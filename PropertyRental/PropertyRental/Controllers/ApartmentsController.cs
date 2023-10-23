@@ -32,13 +32,13 @@ namespace PropertyRental.Controllers
 
         // GET: Apartments/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? apartmentID)
         {
-            if (id == null)
+            if (apartmentID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Apartment apartment = db.Apartments.Find(id);
+            Apartment apartment = db.Apartments.Find(apartmentID);
             if (apartment == null)
             {
                 return HttpNotFound();
@@ -50,9 +50,15 @@ namespace PropertyRental.Controllers
         [Authorize(Roles = "PropertyManager,Admin")]
         public ActionResult Create()
         {
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
-            ViewBag.BuildingID = new SelectList(db.Buildings, "BuildingID", "Amenities");
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName");
+            // show only the addresses that belong to the buildings
+            var addresses = db.Buildings.Select(a => a.AddressID).ToList();
+            ViewBag.AddressID = db.Addresses
+                .Where(a => addresses.Contains(a.AddressID))
+                .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
+            ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
+            ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName");
             return View();
         }
@@ -72,29 +78,40 @@ namespace PropertyRental.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", apartment.AddressID);
-            ViewBag.BuildingID = new SelectList(db.Buildings, "BuildingID", "Amenities", apartment.BuildingID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", apartment.PropertyManagerID);
-            ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName", apartment.StatusID);
+            var addresses = db.Buildings.Select(a => a.AddressID).ToList();
+            ViewBag.AddressID = db.Addresses
+                .Where(a => addresses.Contains(a.AddressID))
+                .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
+            ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
+            ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName");
             return View(apartment);
         }
 
         // GET: Apartments/Edit/5
         [Authorize(Roles = "PropertyManager,Admin")]
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? apartmentID)
         {
-            if (id == null)
+            if (apartmentID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Apartment apartment = db.Apartments.Find(id);
+            Apartment apartment = db.Apartments.Find(apartmentID);
             if (apartment == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", apartment.AddressID);
-            ViewBag.BuildingID = new SelectList(db.Buildings, "BuildingID", "Amenities", apartment.BuildingID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", apartment.PropertyManagerID);
+
+            var addresses = db.Buildings.Select(a => a.AddressID).ToList();
+            ViewBag.AddressID = db.Addresses
+                .Where(a => addresses.Contains(a.AddressID))
+                .Select(a => new SelectListItem { Value = a.AddressID.ToString(), Text = a.StreetName + a.StreetNumber + a.City + a.Province });
+            ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem { Text = b.BuildingName, Value = b.BuildingID.ToString() });
+            ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName", apartment.StatusID);
             return View(apartment);
         }
@@ -113,26 +130,35 @@ namespace PropertyRental.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName", apartment.AddressID);
-            ViewBag.BuildingID = new SelectList(db.Buildings, "BuildingID", "Amenities", apartment.BuildingID);
-            ViewBag.PropertyManagerID = new SelectList(db.Users, "UserID", "FirstName", apartment.PropertyManagerID);
+            ViewBag.AddressID = db.Addresses.Select(a => new SelectListItem
+            {
+                Text = a.StreetName + " " + a.StreetNumber + ", " + a.City + ", " + a.Province,
+                Value = a.AddressID.ToString()
+            });
+            ViewBag.BuildingID = db.Buildings.Select(b => new SelectListItem {  Text = b.BuildingName, Value = b.BuildingID.ToString() });
+            ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             ViewBag.StatusID = new SelectList(db.Statuses, "StatusID", "StatusName", apartment.StatusID);
             return View(apartment);
         }
 
         // GET: Apartments/Delete/5
         [Authorize(Roles = "PropertyManager,Admin")]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? apartmentID)
         {
-            if (id == null)
+            if (apartmentID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Apartment apartment = db.Apartments.Find(id);
+            Apartment apartment = db.Apartments.Find(apartmentID);
             if (apartment == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.PropertyManagerID = db.Users
+                    .Where(u => u.RoleID == 2)
+                    .Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             return View(apartment);
         }
 
@@ -140,9 +166,9 @@ namespace PropertyRental.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles ="PropertyManager,Admin")]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int apartmentID)
         {
-            Apartment apartment = db.Apartments.Find(id);
+            Apartment apartment = db.Apartments.Find(apartmentID);
             db.Apartments.Remove(apartment);
             db.SaveChanges();
             return RedirectToAction("Index");

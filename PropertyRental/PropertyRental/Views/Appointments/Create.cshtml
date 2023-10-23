@@ -75,5 +75,6 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index")|
+    @Html.ActionLink("Back to Apartment", "Details", "Apartments", new { apartmentID = Request.QueryString["apartmentID"] }, new { user = User.Identity.Name })
 </div>

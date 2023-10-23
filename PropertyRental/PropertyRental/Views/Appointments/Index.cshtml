@@ -60,9 +60,9 @@ else
                 @Html.DisplayFor(modelItem => item.PropertyManager.LastName)
             </td>
             <td>
-                @Html.ActionLink("See details", "Details", new { id = item.AppointmentID }) |
-                @Html.ActionLink("Reschedule", "Edit", new { id = item.AppointmentID }) |
-                @Html.ActionLink("Cancel", "Delete", new { id = item.AppointmentID })
+                @Html.ActionLink("See details", "Details", new { appointmentID = item.AppointmentID }) |
+                @Html.ActionLink("Reschedule", "Edit", new { appointmentID = item.AppointmentID }) |
+                @Html.ActionLink("Cancel", "Delete", new { appointmentID = item.AppointmentID })
             </td>
         </tr>
     }
