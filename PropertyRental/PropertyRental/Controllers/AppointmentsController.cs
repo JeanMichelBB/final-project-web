@@ -43,13 +43,13 @@ namespace PropertyRental.Controllers
 
         // GET: Appointments/Details/5
         [Authorize]
-        public ActionResult Details(int? apartmentID)
+        public ActionResult Details(int? appointmentID)
         {
-            if (apartmentID == null)
+            if (appointmentID == null)
             {
                 return RedirectToAction("Index");
             }
-            Appointment appointment = db.Appointments.Find(apartmentID);
+            Appointment appointment = db.Appointments.Find(appointmentID);
             if (appointment == null)
             {
                 return HttpNotFound();
