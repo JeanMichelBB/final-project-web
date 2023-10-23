@@ -6,7 +6,20 @@ IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'PropertyRentalDB')
 	GO
 		USE [PropertyRentalDB]
 	GO
-
+DROP TABLE IF EXISTS Events;
+DROP TABLE IF EXISTS ApartmentImages;
+DROP TABLE IF EXISTS Apartments;
+DROP TABLE IF EXISTS Messages;
+DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS Buildings;
+DROP TABLE IF EXISTS Logins;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS EventTypes;
+DROP TABLE IF EXISTS Statuses;
+DROP TABLE IF EXISTS MessageStatuses;
+DROP TABLE IF EXISTS Addresses;
+DROP TABLE IF EXISTS Roles;
+GO
 -- Create the Roles Table
 CREATE TABLE Roles (
     RoleID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -70,6 +83,7 @@ CREATE TABLE Buildings (
     AddressID INT NOT NULL,
     NumberOfFloors INT,
     ConstructionYear INT,
+	BuildingName NVARCHAR(80),
     Amenities NVARCHAR(MAX),
 	FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID)
 );
@@ -124,7 +138,7 @@ CREATE TABLE ApartmentImages (
     ImageID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     ApartmentID INT NOT NULL,
     ImageURL NVARCHAR(MAX),
-    FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID)
+    FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID) ON DELETE CASCADE
 );
 GO
 -- Create the Events Table
@@ -136,10 +150,10 @@ CREATE TABLE Events (
     ApartmentID INT,
     Timestamp DATETIME,
     EventTypeID INT,
-    FOREIGN KEY (PropertyManagerID) REFERENCES Users(UserID),
-    FOREIGN KEY (PropertyOwnerID) REFERENCES Users(UserID),
-    FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID),
-    FOREIGN KEY (EventTypeID) REFERENCES EventTypes(EventTypeID)
+    FOREIGN KEY (PropertyManagerID) REFERENCES Users(UserID) ON DELETE NO ACTION,
+    FOREIGN KEY (PropertyOwnerID) REFERENCES Users(UserID) ON DELETE NO ACTION,
+    FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID) ON DELETE CASCADE,
+    FOREIGN KEY (EventTypeID) REFERENCES EventTypes(EventTypeID) ON DELETE CASCADE
 );
 GO
 -- Seed the Roles Table
@@ -191,16 +205,16 @@ VALUES
     (1, 'admin@example.com', 'adminpassword');
 GO
 -- Seed the Buildings Table
-INSERT INTO Buildings (AddressID, NumberOfFloors, ConstructionYear, Amenities)
+INSERT INTO Buildings (AddressID, NumberOfFloors, ConstructionYear, Amenities, BuildingName)
 VALUES
-    (1, 5, 2010, 'Parking Garage'),
-    (2, 10, 2015, 'Swimming Pool');
+    (1, 5, 2010, 'Parking, Gym, Pool', 'The Mountain Palace'),
+    (2, 10, 2015, 'Swimming Pool', 'Saint Bartolome');
 GO
 -- Seed the Apartments Table
 INSERT INTO Apartments (PropertyManagerID, AddressID, StatusID, BuildingID, NumberOfRooms, Amenities, Price, Floor, ConstructionYear, Area)
 VALUES
-    (3, 1, 1, 1, 2, 'Balcony, Parking', 1200.00, 2, 2010, 800),
-    (3, 2, 2, 2, 3, 'Swimming Pool, Gym', 1500.00, 4, 2015, 1100);
+    (3, 1, 1, 1, 2, 'Balcony, Furnished, No cats allowed', 1200.00, 2, 2010, 800),
+    (3, 2, 2, 2, 3, 'Balcony, Patio, Hard wood floor', 1500.00, 4, 2015, 1100);
 GO
 -- Seed the Appointments Table
 INSERT INTO Appointments (PropertyManagerID, TenantID, Timestamp, AddressID)

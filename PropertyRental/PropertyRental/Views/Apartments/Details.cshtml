@@ -7,11 +7,25 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Apartment</h4>
+    @if (!User.IsInRole("Potential Tenant"))
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { apartmentID = Model.ApartmentID }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
+    else
+    {
+        <p>
+            @Html.ActionLink("Schedule Appointment", "Create", "Appointments", new { apartmentID = Model.ApartmentID }, new { user = User.Identity.Name }) |
+            @Html.ActionLink("Message Manager", "Create", "Messages", new { apartmentID = Model.ApartmentID }, new { user = User.Identity.Name }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfRooms)
+            Number of Rooms
         </dt>
 
         <dd>
@@ -59,15 +73,25 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
+            Address
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Address.StreetName)
+            @Html.DisplayFor(model => model.Address.StreetNumber)
+            @Html.DisplayFor(model => model.Address.City)
+            @Html.DisplayFor(model => model.Address.Province)
+
+        </dd>
+        <dt>
+            Building
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Building.BuildingName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Building.Amenities)
+            Building Amenities
         </dt>
 
         <dd>
@@ -75,35 +99,33 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User.FirstName)
+            Property Manager
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.User.FirstName)
+            @Html.DisplayFor(model => model.User.LastName)
         </dd>
+        @if (!User.IsInRole("Potential Tenant"))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Status.StatusName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status.StatusName)
+            </dd>
+        }
 
         <dt>
-            @Html.DisplayNameFor(model => model.Status.StatusName)
+            Images
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Status.StatusName)
+            @foreach (var item in Model.ApartmentImages)
+            {
+                <img src="@Url.Content(item.ImageURL)" alt="Image" />
+            }
         </dd>
-
     </dl>
 </div>
-<p>
-    @if (!User.IsInRole("Potential Tenant"))
-    {
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.ApartmentID }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
-    }
-    else
-    {
-        <p>
-        @Html.ActionLink("Back to List", "Index")
-        </p>
-    }
-</p>
+

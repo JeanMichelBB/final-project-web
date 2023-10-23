@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<PropertyRental.Models.Apartment>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Apartments";
 }
 
-<h2>Index</h2>
+<h2>Apartments</h2>
 @if (!User.IsInRole("Potential Tenant"))
 {
     <p>
@@ -14,31 +14,23 @@
 <table class="table">
     <tr>
         <th>
-            Address
-        </th>
-        <th>
-            Apartment Amenities
-        </th>
-        <th>
-            N of Rooms
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Area)
+            Number of Rooms
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
+            Amenities
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Area)
+        </th>
+
+        <th>
             @Html.DisplayNameFor(model => model.Floor)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ConstructionYear)
-        </th>
-        <th>
             Property Manager
-        </th>
-        <th>
-            Status
         </th>
         <th></th>
     </tr>
@@ -46,50 +38,35 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Address.StreetName)
-            @Html.DisplayFor(modelItem => item.Address.StreetNumber)
-            @Html.DisplayFor(modelItem => item.Address.City)
-            @Html.DisplayFor(modelItem => item.Address.Province)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amenities)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.NumberOfRooms)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Area)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Floor)
+            @Html.DisplayFor(modelItem => item.Amenities)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ConstructionYear)
+            @Html.DisplayFor(modelItem => item.Area)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Floor)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.User.FirstName)
             @Html.DisplayFor(modelItem => item.User.LastName)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status.StatusName)
-        </td>
         @if (!User.IsInRole("Potential Tenant"))
         {
             <td>
-                @Html.ActionLink("Edit", "Edit", new { appartmentID = item.ApartmentID }) |
-                @Html.ActionLink("Details", "Details", new { appartmentID = item.ApartmentID }) |
-                @Html.ActionLink("Delete", "Delete", new { appartmentID = item.ApartmentID })
+                @Html.ActionLink("Edit", "Edit", new { apartmentID = item.ApartmentID }) |
+                @Html.ActionLink("Details", "Details", new { apartmentID = item.ApartmentID }) |
+                @Html.ActionLink("Delete", "Delete", new { apartmentID = item.ApartmentID })
             </td>
         }
         else
         {
             <td>
-                @Html.ActionLink("Appointment", "Create", "Appointments", new { apartmentID = item.ApartmentID }, new { user = User.Identity.Name }) |
-                @* TODO: Review we are sending the right user id*@
-                @Html.ActionLink("Message Manager", "Create", "Messages", new { apartmentID = item.ApartmentID }, new { user = User.Identity.Name }) |
                 @Html.ActionLink("View Details", "Details", new { apartmentID = item.ApartmentID })
             </td>
         }

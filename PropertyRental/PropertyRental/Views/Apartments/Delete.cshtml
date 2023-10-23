@@ -12,7 +12,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfRooms)
+            Number of Rooms
         </dt>
 
         <dd>
@@ -44,7 +44,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ConstructionYear)
+            Construction Year
         </dt>
 
         <dd>
@@ -60,11 +60,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
+           Address
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Address.StreetName)
+            @Html.DisplayFor(model => model.Address.StreetNumber),
+            @Html.DisplayFor(model => model.Address.City),
+            @Html.DisplayFor(model => model.Address.Province)
+
         </dd>
 
         <dt>
@@ -76,7 +80,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User.FirstName)
+            Property Manager
         </dt>
 
         <dd>
@@ -84,7 +88,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Status.StatusName)
+            Status
         </dt>
 
         <dd>
