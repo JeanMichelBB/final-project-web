@@ -20,18 +20,33 @@ namespace PropertyRental.Controllers
         {
             userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
 
-            var messages = db.Messages
-                .Include(m => m.MessageStatus)
-                .Include(m => m.Receiver)
-                .Include(m => m.Sender)
-                .Where(m => m.SenderID == userID || m.ReceiverID == userID);
+            var messages = db.Messages.Where(m => m.ReceiverID == userID).ToList();
+            ViewBag.IsReceived = true;
+            return View(messages);
+        }
 
-            return View(messages.ToList());
+        public ActionResult Received()
+        {
+            userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
+            var receivedMessages = db.Messages.Where(m => m.ReceiverID == userID).ToList();
+            ViewBag.IsReceived = true;
+            ViewBag.IsSent = false;
+            return View("Index", receivedMessages);
+        }
+
+        public ActionResult Sent()
+        {
+            userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
+            var sentMessages = db.Messages.Where(m => m.SenderID == userID).ToList();
+            var receivedMessages = db.Messages.Where(m => m.ReceiverID == userID).ToList();
+            ViewBag.IsReceived = false;
+            ViewBag.IsSent = true;
+            return View("Index", sentMessages);
         }
 
         // GET: Messages/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, bool? isReceived)
         {
             if (id == null)
             {
@@ -42,38 +57,54 @@ namespace PropertyRental.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (isReceived == true)
+            {
+                message.MessageStatusID = 2;
+                db.Entry(message).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            var senderEmail = db.Logins.FirstOrDefault(u => u.UserID == message.SenderID);
+            var receiverEmail = db.Logins.FirstOrDefault(u => u.UserID == message.ReceiverID);
+            if (senderEmail == null || receiverEmail == null)
+            {
+                ViewBag.SenderEmail = "";
+                ViewBag.ReceiverEmail = "";
+            } else
+            {
+                ViewBag.SenderEmail = senderEmail.Email;
+                ViewBag.ReceiverEmail = receiverEmail.Email;
+            }
             return View(message);
         }
 
         // GET: Messages/Create
         [Authorize]
-        public ActionResult Create(int? id)
+        public ActionResult Create(int? apartmentID)
         {
-            var user = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name);
+            var userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
             if (User.IsInRole("Potential Tenant"))
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
-                
-                ViewBag.SenderID = new SelectList(db.Users.Where(predicate: u => u.UserID == user.UserID), "UserID", "FirstName");
-                // reviver id is null
-                if (id != null)
+                // ViewBag.SenderID = new SelectList(db.Users.Where(predicate: u => u.UserID == user.UserID), "UserID", "FirstName");
+                ViewBag.SenderID = db.Users.Where(u => u.UserID == userID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+                if (apartmentID != null)
                 {
-                    var apartment = db.Apartments.Find(id);
-
-                    ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID == apartment.PropertyManagerID), "UserID", "FirstName");
+                    var apartment = db.Apartments.Find(apartmentID);
+                    ViewBag.ReceiverID = db.Users.Where(u => u.UserID == apartment.PropertyManagerID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
                 }
                 else
                 {
-                    ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
+                    return RedirectToAction("Index", "Apartments");
                 }
             }
             else
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
-                ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName");
+                ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID != userID), "UserID", "FirstName");
                 ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == userID), "UserID", "FirstName");
             }
-                return View();
+            return View();
         }
 
         // POST: Messages/Create
@@ -86,6 +117,7 @@ namespace PropertyRental.Controllers
         {
             if (ModelState.IsValid)
             {
+                message.Timestamp = DateTime.Now;
                 db.Messages.Add(message);
                 db.SaveChanges();
                 return RedirectToAction("Index");
