@@ -24,7 +24,7 @@ namespace PropertyRental.Models
         private string country;
         private string province;
 
-        private int roleID = 4;
+        private int roleID;
 
 
         public int LoginID { get => loginID; set => loginID = value; }

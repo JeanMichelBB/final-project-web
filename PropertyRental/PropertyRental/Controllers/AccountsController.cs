@@ -83,7 +83,7 @@ namespace PropertyRental.Controllers
                         FirstName = signup.FirstName,
                         LastName = signup.LastName,
                         Phone = signup.Phone,
-                        RoleID = signup.RoleID
+                        RoleID = 4
                     };
                     // Create instances for Address
                     var address = new Address
