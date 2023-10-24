@@ -20,6 +20,17 @@
                         <li>@Html.ActionLink("Home", "Index", "Apartments")</li>
                         <li>@Html.ActionLink("Messages", "Index", "Messages")</li>
                         <li>@Html.ActionLink("Appointments", "Index", "Appointments")</li>
+                        if (User.IsInRole("Property Owner") || User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                            <li>@Html.ActionLink("Buidlings", "Index", "Buildings")</li>
+                            <li>@Html.ActionLink("Events", "Index", "Events")</li>
+                        }
+                        else if (User.IsInRole("Property Manager"))
+                        {
+                            <li>@Html.ActionLink("Buidlings", "Index", "Buildings")</li>
+                            <li>@Html.ActionLink("Events", "Index", "Events")</li>
+                        }
                         <li>@Html.ActionLink("Logout", "Logout", "Accounts")</li>
                     }
                 </ul>
