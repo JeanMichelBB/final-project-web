@@ -174,8 +174,7 @@ GO
 INSERT INTO MessageStatuses (Status)
 VALUES
     ('Unread'),
-    ('Read'),
-    ('Replied');
+    ('Read');
 GO
 -- Seed the Statuses Table
 INSERT INTO Statuses (StatusName)
@@ -225,10 +224,10 @@ GO
 -- Seed the ApartmentImages Table
 INSERT INTO ApartmentImages (ApartmentID, ImageURL)
 VALUES
-    (1, 'image1.jpg'),
-    (1, 'image2.jpg'),
-    (2, 'image3.jpg'),
-    (2, 'image4.jpg');
+    (1, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196898.jpg'),
+    (1, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196899.jpg'),
+    (2, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562173.jpg'),
+    (2, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562176.jpg');
 GO
 -- Seed the Messages Table
 INSERT INTO Messages (SenderID, ReceiverID, Subject, MessageBody, Timestamp, MessageStatusID)

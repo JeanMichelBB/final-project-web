@@ -143,8 +143,8 @@ namespace PropertyRental.Controllers
                 return HttpNotFound();
             }
             ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status", message.MessageStatusID);
-            ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "FirstName", message.ReceiverID);
-            ViewBag.SenderID = new SelectList(db.Users, "UserID", "FirstName", message.SenderID);
+            ViewBag.ReceiverID = db.Users.Where(u => u.UserID == message.ReceiverID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+            ViewBag.SenderID = db.Users.Where(u => u.UserID == message.SenderID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             return View(message);
         }
 

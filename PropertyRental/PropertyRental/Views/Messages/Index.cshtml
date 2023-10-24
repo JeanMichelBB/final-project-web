@@ -52,9 +52,11 @@ else
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Sender.FirstName)
+                    @Html.DisplayFor(modelItem => item.Sender.LastName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Receiver.FirstName)
+                    @Html.DisplayFor(modelItem => item.Receiver.LastName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Subject)
