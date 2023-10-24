@@ -10,6 +10,7 @@ namespace PropertyRental.Models
     {
         [Display(Name = "Hour")]
         public string SelectedTime { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Date")]
         public string SelectedDate { get; set; }
     }

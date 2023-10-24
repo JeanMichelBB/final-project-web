@@ -12,6 +12,32 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            From
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender.FirstName)
+            @Html.DisplayFor(model => model.Sender.LastName)
+        </dd>
+
+        <dt>
+            To
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver.FirstName)
+            @Html.DisplayFor(model => model.Receiver.LastName)
+        </dd>
+
+        <dt>
+            Date and Time
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Subject)
         </dt>
 
@@ -20,19 +46,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.MessageBody)
+            Message
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.MessageBody)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Timestamp)
         </dd>
 
         <dt>
@@ -41,22 +59,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.MessageStatus.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Receiver.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Receiver.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Sender.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Sender.FirstName)
         </dd>
 
     </dl>

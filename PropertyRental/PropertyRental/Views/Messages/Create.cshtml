@@ -15,7 +15,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.SenderID, "SenderID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SenderID, "From", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("SenderID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SenderID, "", new { @class = "text-danger" })
@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ReceiverID, "ReceiverID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ReceiverID, "To", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ReceiverID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ReceiverID, "", new { @class = "text-danger" })
@@ -41,12 +41,12 @@
         <div class="form-group">
             @Html.LabelFor(model => model.MessageBody, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.MessageBody, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.MessageBody, htmlAttributes: new { @class = "form-control" , rows = 5, cols = 30 })
                 @Html.ValidationMessageFor(model => model.MessageBody, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="display: none">
             @Html.LabelFor(model => model.Timestamp, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Timestamp, new { htmlAttributes = new { @class = "form-control" } })
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="display: none">
             @Html.LabelFor(model => model.MessageStatusID, "MessageStatusID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("MessageStatusID", null, htmlAttributes: new { @class = "form-control" })
