@@ -10,6 +10,7 @@ using PropertyRental.Models;
 
 namespace PropertyRental.Controllers
 {
+    [Authorize(Roles = "Property Manager,Admin,Property Owner")]
     public class EventsController : Controller
     {
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
@@ -17,6 +18,7 @@ namespace PropertyRental.Controllers
         // GET: Events
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Events";
             var events = db.Events
                 .Include(e => e.Apartment)  // Assuming "Apartment" is a navigation property
                 .Include(e => e.EventType)

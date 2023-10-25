@@ -12,19 +12,19 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfFloors)
+            Number Of Floors
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ConstructionYear)
+           Construction Year
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Amenities)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BuildingName)
+            Building Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Address.StreetName)
+           Address
         </th>
         <th></th>
     </tr>
@@ -45,6 +45,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Address.StreetName)
+            @Html.DisplayFor(modelItem => item.Address.StreetNumber)
+            @Html.DisplayFor(modelItem => item.Address.City)
+            @Html.DisplayFor(modelItem => item.Address.Province)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.BuildingID }) |

@@ -18,6 +18,7 @@ namespace PropertyRental.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Home";
             IQueryable<Apartment> apartments;
             // Show only the apartments that are available to the Tenants
             if (User.IsInRole("Potential Tenant"))
@@ -47,7 +48,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Create
-        [Authorize(Roles = "PropertyManager,Admin")]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Create()
         {
             // show only the addresses that belong to the buildings
@@ -68,7 +69,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="PropertyManager,Admin")]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Create([Bind(Include = "ApartmentID,PropertyManagerID,AddressID,StatusID,BuildingID,NumberOfRooms,Amenities,Price,Floor,ConstructionYear,Area")] Apartment apartment)
         {
             if (ModelState.IsValid)
@@ -91,7 +92,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Edit/5
-        [Authorize(Roles = "PropertyManager,Admin")]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Edit(int? apartmentID)
         {
             if (apartmentID == null)
@@ -121,7 +122,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="PropertyManager,Admin")]
+        [Authorize(Roles ="Property Manager,Admin,Property Owner")]
         public ActionResult Edit([Bind(Include = "ApartmentID,PropertyManagerID,AddressID,StatusID,BuildingID,NumberOfRooms,Amenities,Price,Floor,ConstructionYear,Area")] Apartment apartment)
         {
             if (ModelState.IsValid)
@@ -144,7 +145,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Delete/5
-        [Authorize(Roles = "PropertyManager,Admin")]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Delete(int? apartmentID)
         {
             if (apartmentID == null)
@@ -165,7 +166,7 @@ namespace PropertyRental.Controllers
         // POST: Apartments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="PropertyManager,Admin")]
+        [Authorize(Roles ="Property Manager,Admin,Property Owner")]
         public ActionResult DeleteConfirmed(int apartmentID)
         {
             Apartment apartment = db.Apartments.Find(apartmentID);

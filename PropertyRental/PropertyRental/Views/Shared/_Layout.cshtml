@@ -3,48 +3,41 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <title>@ViewBag.Title - Property Rental INC ®</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <h1>Property Rental INC ®</h1>
-        <div class="container">
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li><a>Welcome @User.Identity.Name</a></li>
-                        <li>@Html.ActionLink("Home", "Index", "Apartments")</li>
-                        <li>@Html.ActionLink("Messages", "Received", "Messages")</li>
-                        <li>@Html.ActionLink("Appointments", "Index", "Appointments")</li>
-                        if (User.IsInRole("Property Owner") || User.IsInRole("Admin"))
-                        {
-                            <li>@Html.ActionLink("Users", "Index", "Users")</li>
-                            <li>@Html.ActionLink("Buidlings", "Index", "Buildings")</li>
-                            <li>@Html.ActionLink("Events", "Index", "Events")</li>
-                        }
-                        else if (User.IsInRole("Property Manager"))
-                        {
-                            <li>@Html.ActionLink("Buidlings", "Index", "Buildings")</li>
-                            <li>@Html.ActionLink("Events", "Index", "Events")</li>
-                        }
-                        <li>@Html.ActionLink("Logout", "Logout", "Accounts")</li>
-                    }
-                </ul>
-            </div>
-        </div>
+    <div class="navbar navbar-expand-lg bg-body-tertiary justify-content-around">
+        <span class="navbar-brand mb-0 h1">Property Rental INC ®</span>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Apartments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Home" ? "nav-link active" : "nav-link " })</li>
+                <li class="nav-item">@Html.ActionLink("Messages", "Received", "Messages", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Messages" ? "nav-link active" : "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Appointments", "Index", "Appointments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Appointments" ? "nav-link active" : "nav-link" })</li>
+                if (User.IsInRole("Property Owner") || User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Users", "Index", "Users", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Users" ? "nav-link active" : "nav-link " })</li>
+                }
+                if (!User.IsInRole("Potential Tenant"))
+                {
+                    <li>@Html.ActionLink("Buidlings", "Index", "Buildings", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Buildings" ? "nav-link active" : "nav-link " })</li>
+                    <li>@Html.ActionLink("Events", "Index", "Events", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Events" ? "nav-link active" : "nav-link " })</li>
+                }
+            }
+        </ul>
+        <div class="btn btn-default">@Html.ActionLink("Logout", "Logout", "Accounts", null, htmlAttributes: new { @class = "nav-link" })</div>
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+            <p>&copy; @DateTime.Now.Year - Property Rental INC ®</p>
         </footer>
     </div>
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 </body>
 </html>

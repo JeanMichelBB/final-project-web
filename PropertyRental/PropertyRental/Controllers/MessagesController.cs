@@ -18,6 +18,7 @@ namespace PropertyRental.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Messages";
             userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
 
             var messages = db.Messages.Where(m => m.ReceiverID == userID).ToList();
@@ -27,6 +28,7 @@ namespace PropertyRental.Controllers
 
         public ActionResult Received()
         {
+            ViewBag.ActiveLink = "Messages";
             userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;
             var receivedMessages = db.Messages.Where(m => m.ReceiverID == userID).ToList();
             ViewBag.IsReceived = true;
@@ -101,8 +103,8 @@ namespace PropertyRental.Controllers
             else
             {
                 ViewBag.MessageStatusID = new SelectList(db.MessageStatuses, "MessageStatusID", "Status");
-                ViewBag.ReceiverID = new SelectList(db.Users.Where(u => u.UserID != userID), "UserID", "FirstName");
-                ViewBag.SenderID = new SelectList(db.Users.Where(u => u.UserID == userID), "UserID", "FirstName");
+                ViewBag.ReceiverID = db.Users.Where(u => u.UserID != userID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
+                ViewBag.SenderID = db.Users.Where(u => u.UserID == userID).Select(u => new SelectListItem { Text = u.FirstName + " " + u.LastName, Value = u.UserID.ToString() });
             }
             return View();
         }

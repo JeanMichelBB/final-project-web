@@ -10,6 +10,7 @@ using PropertyRental.Models;
 
 namespace PropertyRental.Controllers
 {
+    [Authorize(Roles = "Property Manager,Admin,Property Owner")]
     public class UsersController : Controller
     {
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
@@ -17,6 +18,7 @@ namespace PropertyRental.Controllers
         // GET: Users
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Users";
             var users = db.Users.Include(u => u.Address).Include(u => u.Role);
             return View(users.ToList());
         }

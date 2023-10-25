@@ -19,6 +19,7 @@ namespace PropertyRental.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Appointments";
             if (User.IsInRole("Potential Tenant"))
             {
                 var userID = db.Logins.FirstOrDefault(u => u.Email == User.Identity.Name).UserID;

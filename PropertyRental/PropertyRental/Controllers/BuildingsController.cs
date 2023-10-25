@@ -15,13 +15,16 @@ namespace PropertyRental.Controllers
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Buildings
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Index()
         {
+            ViewBag.ActiveLink = "Buildings";
             var buildings = db.Buildings.Include(b => b.Address);
             return View(buildings.ToList());
         }
 
         // GET: Buildings/Details/5
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +40,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Buildings/Create
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Create()
         {
             ViewBag.AddressID = new SelectList(db.Addresses, "AddressID", "StreetName");
@@ -48,6 +52,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Create([Bind(Include = "BuildingID,AddressID,NumberOfFloors,ConstructionYear,Amenities,BuildingName,StreetName,StreetNumber,City,PostalCode,Country,Province")] BuildingViewModel buildingView)
         {
             Address address;
@@ -79,6 +84,7 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Buildings/Edit/5
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -115,6 +121,7 @@ namespace PropertyRental.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Edit([Bind(Include = "BuildingID,NumberOfFloors,ConstructionYear,Amenities,BuildingName,StreetName,StreetNumber,City,PostalCode,Country,Province")] BuildingViewModel buildingModel)
         {
             if (ModelState.IsValid)
@@ -146,6 +153,7 @@ namespace PropertyRental.Controllers
 
 
         // GET: Buildings/Delete/5
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -163,6 +171,7 @@ namespace PropertyRental.Controllers
         // POST: Buildings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Property Manager,Admin,Property Owner")]
         public ActionResult DeleteConfirmed(int id)
         {
             Building building = db.Buildings.Find(id);
