@@ -223,14 +223,6 @@ VALUES
 	(4, 3, 1, 1, 1, 'Patio, Hard wood floor', 900.00, 10, 2015, 500),
 	(4, 4, 3, 2, 4, 'Balcony, Jacuzzi, Patio, Hard wood floor', 2000.00, 10, 2015, 1000);
 GO
--- Seed the Appointments Table
-/*
-INSERT INTO Appointments (PropertyManagerID, TenantID, Timestamp, AddressID)
-VALUES
-    (3, 4, '2023-10-15 10:00:00', 2),
-    (3, 4, '2023-10-17 14:00:00', 2);
-GO
-*/
 -- Seed the ApartmentImages Table
 INSERT INTO ApartmentImages (ApartmentID, ImageURL)
 VALUES
@@ -243,19 +235,3 @@ VALUES
 	(4, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196898.jpg'),
     (4, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196899.jpg');
 GO
--- Seed the Messages Table
-/*
-INSERT INTO Messages (SenderID, ReceiverID, Subject, MessageBody, Timestamp, MessageStatusID)
-VALUES
-    (1, 2, 'Regarding Your Property', 'Let''s discuss the maintenance schedule.', '2023-10-13 15:30:00', 1),
-    (4, 3, 'Rental Inquiry', 'I''m interested in renting an apartment.', '2023-10-14 09:15:00', 2);
-*/
-/*
-GO
--- Seed the Events Table (Event Type with ID 1, "Maintenance")
-INSERT INTO Events (PropertyManagerID, PropertyOwnerID, EventDescription, ApartmentID, Timestamp, EventTypeID)
-VALUES
-    (3, 2, 'Scheduled Maintenance', 1, '2023-10-20 09:00:00', 1),
-    (3, 2, 'Inspection', 2, '2023-10-22 11:30:00', 2);
-GO
-*/
