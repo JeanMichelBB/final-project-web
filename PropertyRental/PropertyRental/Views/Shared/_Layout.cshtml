@@ -35,13 +35,19 @@
                     @Html.ActionLink("Logout", "Logout", "Accounts", null, htmlAttributes: new { @class = "nav-link" })
                 </div>
             }
+            else
+            {
+                <div class="btn btn-default">
+                    @Html.ActionLink("Login", "Login", "Accounts", null, htmlAttributes: new { @class = "nav-link" })
+                </div>
+            }
         </div>
     </div>
     <div class="container body-content">
         @if (User.Identity.IsAuthenticated)
         {
             <p class="d-flex justify-content-end fw-light">Logged in as: @User.Identity.Name</p>
-        }
+        } 
         @RenderBody()
         <hr />
         <footer class="d-flex justify-content-between">

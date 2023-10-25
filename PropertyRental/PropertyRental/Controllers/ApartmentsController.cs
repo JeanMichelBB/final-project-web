@@ -15,7 +15,6 @@ namespace PropertyRental.Controllers
         private PropertyRentalDBEntities db = new PropertyRentalDBEntities();
 
         // GET: Apartments
-        [Authorize]
         public ActionResult Index()
         {
             ViewBag.ActiveLink = "Home";
@@ -32,7 +31,6 @@ namespace PropertyRental.Controllers
         }
 
         // GET: Apartments/Details/5
-        [Authorize]
         public ActionResult Details(int? apartmentID)
         {
             if (apartmentID == null)

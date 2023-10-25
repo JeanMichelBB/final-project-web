@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    @if (!User.IsInRole("Potential Tenant"))
+    @if (User.IsInRole("Property Manager") || User.IsInRole("Property Owner") || User.IsInRole("Admin"))
     {
         <p>
             @Html.ActionLink("Edit", "Edit", new { apartmentID = Model.ApartmentID }) |

@@ -5,72 +5,73 @@
 }
 
 <h2>Apartments</h2>
-@if (!User.IsInRole("Potential Tenant"))
-{
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-}
-<table class="table">
-    <tr>
-        <th>
-            Number of Rooms
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            Amenities
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Area)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Floor)
-        </th>
-        <th>
-            Property Manager
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfRooms)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amenities)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Area)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Floor)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-            @Html.DisplayFor(modelItem => item.User.LastName)
-        </td>
-        @if (!User.IsInRole("Potential Tenant"))
-        {
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { apartmentID = item.ApartmentID }) |
-                @Html.ActionLink("Details", "Details", new { apartmentID = item.ApartmentID }) |
-                @Html.ActionLink("Delete", "Delete", new { apartmentID = item.ApartmentID })
-            </td>
-        }
-        else
-        {
-            <td>
-                @Html.ActionLink("View Details", "Details", new { apartmentID = item.ApartmentID })
-            </td>
-        }
-    </tr>
+@if (User.IsInRole("Property Manager") || User.IsInRole("Property Owner") || User.IsInRole("Admin"))
+    {
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
     }
+    <table class="table">
+        <tr>
+            <th>
+                Number of Rooms
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                Amenities
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Area)
+            </th>
 
-</table>
+            <th>
+                @Html.DisplayNameFor(model => model.Floor)
+            </th>
+            <th>
+                Property Manager
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfRooms)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amenities)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Area)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Floor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                    @Html.DisplayFor(modelItem => item.User.LastName)
+                </td>
+                @if (User.IsInRole("Property Manager") || User.IsInRole("Property Owner") || User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { apartmentID = item.ApartmentID }) |
+                        @Html.ActionLink("Details", "Details", new { apartmentID = item.ApartmentID }) |
+                        @Html.ActionLink("Delete", "Delete", new { apartmentID = item.ApartmentID })
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.ActionLink("View Details", "Details", new { apartmentID = item.ApartmentID })
+                    </td>
+                }
+            </tr>
+        }
+
+    </table>

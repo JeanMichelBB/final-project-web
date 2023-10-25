@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using System.Web.UI.WebControls;
+using System.Web.WebPages;
 using PropertyRental.Models;
 
 namespace PropertyRental.Controllers
@@ -58,7 +63,7 @@ namespace PropertyRental.Controllers
                 using (PropertyRentalDBEntities context = new PropertyRentalDBEntities())
                 {
                     // Create instences for login
-                    var login = new Login
+                    var login = new Models.Login
                     {
                         Email = userModel.Email,
                         Password = userModel.Password
@@ -110,19 +115,19 @@ namespace PropertyRental.Controllers
                                         where u.UserID == id
                                         select new LoginModel
                                         {
-                                        UserID = u.UserID,
-                                        FirstName = u.FirstName,
-                                        LastName = u.LastName,
-                                        RoleID = u.RoleID,
-                                        Phone = u.Phone,
-                                        Email = l.Email,
-                                        Password = l.Password,
-                                        StreetName = a.StreetName,
-                                        StreetNumber = a.StreetNumber,
-                                        City = a.City,
-                                        PostalCode = a.PostalCode,
-                                        Country = a.Country,
-                                        Province = a.Province
+                                            UserID = u.UserID,
+                                            FirstName = u.FirstName,
+                                            LastName = u.LastName,
+                                            RoleID = u.RoleID,
+                                            Phone = u.Phone,
+                                            Email = l.Email,
+                                            Password = l.Password,
+                                            StreetName = a.StreetName,
+                                            StreetNumber = a.StreetNumber,
+                                            City = a.City,
+                                            PostalCode = a.PostalCode,
+                                            Country = a.Country,
+                                            Province = a.Province
                                     }).FirstOrDefault();
             if (userModel == null)
             {
@@ -181,6 +186,7 @@ namespace PropertyRental.Controllers
                     return HttpNotFound();
                 }
             }
+            ViewBag.RoleID = new SelectList(db.Roles, "RoleID", "RoleName", userModel.RoleID);
             return View(userModel);
         }
 
@@ -207,6 +213,8 @@ namespace PropertyRental.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.Users.Find(id);
+            Models.Login login = db.Logins.Where(l => l.UserID == id).FirstOrDefault();
+            db.Logins.Remove(login);
             db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");

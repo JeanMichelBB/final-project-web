@@ -16,7 +16,7 @@ namespace PropertyRental
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Logins", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Apartments", action = "Index", id = UrlParameter.Optional }
             );
         }
     }
