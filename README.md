@@ -2,4 +2,4 @@
 
 Developed by [@anyruizd](https://github.com/anyruizd) and [@JeanMichelBB](https://github.com/JeanMichelBB)
 
-![image]("page.png")
+![image]("https://github.com/JeanMichelBB/final-project-web/blob/main/page.png")
