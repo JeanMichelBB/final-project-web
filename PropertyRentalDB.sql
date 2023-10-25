@@ -168,7 +168,9 @@ GO
 INSERT INTO Addresses (StreetName, StreetNumber, City, PostalCode, Country, Province)
 VALUES
     ('123 Main Street', 'Apt 101', 'Cityville', '12345', 'Countryland', 'Stateville'),
-    ('456 Elm Street', 'Apt 202', 'Townsville', '54321', 'Countryland', 'Stateville');
+	('124 Main Street', 'Apt 301', 'Cityville', '5555', 'Countryland', 'Stateville'),
+    ('456 Elm Street', 'Apt 202', 'Townsville', '54321', 'Countryland', 'Stateville'),
+	('567 Elm Street', 'Apt 502', 'Townsville', '5678', 'Countryland', 'Stateville');
 GO
 -- Seed the MessageStatus Table
 INSERT INTO MessageStatuses (Status)
@@ -195,13 +197,17 @@ INSERT INTO Users (FirstName, LastName, RoleID, Phone, AddressID)
 VALUES
     ('John', 'Doe', 1, '123-456-7890', 1), -- Admin
     ('Alice', 'Smith', 2, '987-654-3210', 2), -- Property Owner
-    ('Bob', 'Johnson', 3, '555-123-4567', 1), -- Property Manager
-    ('Eve', 'Brown', 4, '777-888-9999', 2); -- Potential Tenant
+	('Mary', 'Brown', 3, '123-654-3210', 1), -- Property Manager
+    ('Bob', 'Johnson', 3, '555-123-4567', 3); -- Property Manager
 GO
+
 -- Seed the Login Table (for user with ID 1, the admin user)
 INSERT INTO Logins (UserID, Email, Password)
 VALUES
-    (1, 'admin@example.com', 'adminpassword');
+    (1, 'admin@example.com', 'admin123'),
+	(2, 'alice@example.com', 'alice123'),
+	(3, 'mary@example.com', 'mary123'),
+	(4, 'bob@example.com', 'bob123');
 GO
 -- Seed the Buildings Table
 INSERT INTO Buildings (AddressID, NumberOfFloors, ConstructionYear, Amenities, BuildingName)
@@ -212,28 +218,39 @@ GO
 -- Seed the Apartments Table
 INSERT INTO Apartments (PropertyManagerID, AddressID, StatusID, BuildingID, NumberOfRooms, Amenities, Price, Floor, ConstructionYear, Area)
 VALUES
-    (3, 1, 1, 1, 2, 'Balcony, Furnished, No cats allowed', 1200.00, 2, 2010, 800),
-    (3, 2, 2, 2, 3, 'Balcony, Patio, Hard wood floor', 1500.00, 4, 2015, 1100);
+    (3, 1, 1, 1, 2, 'Balcony, Furnished, Cats allowed', 1200.00, 2, 2010, 800),
+    (3, 2, 2, 2, 3, 'Balcony, Patio, Hard wood floor', 1500.00, 4, 2015, 1100),
+	(4, 3, 1, 1, 1, 'Patio, Hard wood floor', 900.00, 10, 2015, 500),
+	(4, 4, 3, 2, 4, 'Balcony, Jacuzzi, Patio, Hard wood floor', 2000.00, 10, 2015, 1000);
 GO
 -- Seed the Appointments Table
+/*
 INSERT INTO Appointments (PropertyManagerID, TenantID, Timestamp, AddressID)
 VALUES
     (3, 4, '2023-10-15 10:00:00', 2),
     (3, 4, '2023-10-17 14:00:00', 2);
 GO
+*/
 -- Seed the ApartmentImages Table
 INSERT INTO ApartmentImages (ApartmentID, ImageURL)
 VALUES
     (1, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196898.jpg'),
     (1, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196899.jpg'),
     (2, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562173.jpg'),
-    (2, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562176.jpg');
+    (2, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562176.jpg'),
+	(3, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562173.jpg'),
+    (3, 'https://images.rentals.ca/property-pictures/large/montreal-qc/569420/apartment-15562176.jpg'),
+	(4, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196898.jpg'),
+    (4, 'https://images.rentals.ca/property-pictures/large/montreal-qc/286775/apartment-18196899.jpg');
 GO
 -- Seed the Messages Table
+/*
 INSERT INTO Messages (SenderID, ReceiverID, Subject, MessageBody, Timestamp, MessageStatusID)
 VALUES
     (1, 2, 'Regarding Your Property', 'Let''s discuss the maintenance schedule.', '2023-10-13 15:30:00', 1),
     (4, 3, 'Rental Inquiry', 'I''m interested in renting an apartment.', '2023-10-14 09:15:00', 2);
+*/
+/*
 GO
 -- Seed the Events Table (Event Type with ID 1, "Maintenance")
 INSERT INTO Events (PropertyManagerID, PropertyOwnerID, EventDescription, ApartmentID, Timestamp, EventTypeID)
@@ -241,3 +258,4 @@ VALUES
     (3, 2, 'Scheduled Maintenance', 1, '2023-10-20 09:00:00', 1),
     (3, 2, 'Inspection', 2, '2023-10-22 11:30:00', 2);
 GO
+*/

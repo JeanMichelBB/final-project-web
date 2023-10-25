@@ -250,16 +250,17 @@ namespace PropertyRental.Controllers
                 {
                     DateTime selectedDateTime = DateTime.Parse(appointmentView.SelectedDate + " " + appointmentView.SelectedTime);
                     appointmentView.Timestamp = selectedDateTime;
-                    Appointment appointment = new Appointment
+
+                    Appointment appointment = db.Appointments.Find(appointmentView.AppointmentID);
+                    if (appointment != null)
                     {
-                        PropertyManagerID = appointmentView.PropertyManagerID,
-                        TenantID = appointmentView.TenantID,
-                        Timestamp = appointmentView.Timestamp,
-                        AddressID = appointmentView.AddressID
-                    };
-                    db.Appointments.Add(appointment);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                        appointment.PropertyManagerID = appointmentView.PropertyManagerID;
+                        appointment.Timestamp = appointmentView.Timestamp;
+                        appointment.AddressID = appointmentView.AddressID;
+                        db.Entry(appointment).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 } else
                 {
                     ModelState.AddModelError("SelectedTime", "Please enter a valid time");

@@ -9,34 +9,46 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-expand-lg bg-body-tertiary justify-content-around">
-        <span class="navbar-brand mb-0 h1">Property Rental INC ®</span>
-        <ul class="navbar-nav mb-2 mb-lg-0">
+    <div class="navbar navbar-expand-lg bg-body-tertiary justify-content-between">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Property Rental INC ®</span>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Apartments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Home" ? "nav-link active" : "nav-link " })</li>
+                    <li class="nav-item">@Html.ActionLink("Messages", "Received", "Messages", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Messages" ? "nav-link active" : "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Appointments", "Index", "Appointments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Appointments" ? "nav-link active" : "nav-link" })</li>
+                    if (User.IsInRole("Property Owner") || User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Users", "Index", "Users", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Users" ? "nav-link active" : "nav-link " })</li>
+                    }
+                    if (!User.IsInRole("Potential Tenant"))
+                    {
+                        <li>@Html.ActionLink("Buidlings", "Index", "Buildings", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Buildings" ? "nav-link active" : "nav-link " })</li>
+                        <li>@Html.ActionLink("Events", "Index", "Events", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Events" ? "nav-link active" : "nav-link " })</li>
+                    }
+                }
+            </ul>
             @if (User.Identity.IsAuthenticated)
             {
-                <li class="nav-item">@Html.ActionLink("Home", "Index", "Apartments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Home" ? "nav-link active" : "nav-link " })</li>
-                <li class="nav-item">@Html.ActionLink("Messages", "Received", "Messages", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Messages" ? "nav-link active" : "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Appointments", "Index", "Appointments", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Appointments" ? "nav-link active" : "nav-link" })</li>
-                if (User.IsInRole("Property Owner") || User.IsInRole("Admin"))
-                {
-                    <li>@Html.ActionLink("Users", "Index", "Users", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Users" ? "nav-link active" : "nav-link " })</li>
-                }
-                if (!User.IsInRole("Potential Tenant"))
-                {
-                    <li>@Html.ActionLink("Buidlings", "Index", "Buildings", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Buildings" ? "nav-link active" : "nav-link " })</li>
-                    <li>@Html.ActionLink("Events", "Index", "Events", null, htmlAttributes: new { @class = ViewBag.ActiveLink == "Events" ? "nav-link active" : "nav-link " })</li>
-                }
+                <div class="btn btn-default">
+                    @Html.ActionLink("Logout", "Logout", "Accounts", null, htmlAttributes: new { @class = "nav-link" })
+                </div>
             }
-        </ul>
-        <div class="btn btn-default">@Html.ActionLink("Logout", "Logout", "Accounts", null, htmlAttributes: new { @class = "nav-link" })</div>
+        </div>
     </div>
     <div class="container body-content">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p class="d-flex justify-content-end fw-light">Logged in as: @User.Identity.Name</p>
+        }
         @RenderBody()
         <hr />
-        <footer>
+        <footer class="d-flex justify-content-between">
+            <p>Developed by Any and Jean-Michel</p>
             <p>&copy; @DateTime.Now.Year - Property Rental INC ®</p>
         </footer>
-    </div>
+        </div>
     <script src="~/Scripts/jquery-3.7.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 </body>
